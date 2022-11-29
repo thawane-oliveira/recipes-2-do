@@ -6,28 +6,35 @@ describe('Testes do Header', () => {
   it('Verifica se há um header com dois ícones, um deles tendo um botão. Ao clicar neste botão, o usuário deve ser direcionado para a página Profile', async () => {
     render(<App />);
 
-    const profileButton = screen.getByTestId('profile-button');
+    const emailInput = screen.getByTestId('email-input');
+    const passwordInput = screen.getByTestId('password-input');
+    const loginButton = screen.getByTestId('login-submit-btn');
+
+    userEvent.type(emailInput, 'gappy@soft.wet');
+    userEvent.type(passwordInput, 123456);
+    userEvent.click(loginButton);
+
+    const profileButton = await screen.findByTestId('profile-button');
 
     userEvent.click(profileButton);
 
-    await waitFor(() => {
-      const title = screen.getByRole('heading', { name: /profile/i, level: 1 });
+    const title = await screen.findByRole('heading', { name: /profile/i, level: 1 });
 
-      expect(title).toBeVisible();
-    });
+    expect(title).toBeVisible();
   });
 
-  it('Verifica se um input de pesquisa é exibido após clicar no botão de search', async () => {
+  it('Verifica se um input de pesquisa é exibido após clicar no botão de search. Clicando no botão de novo, esse input deve sumir', async () => {
     render(<App />);
 
     const searchButton = screen.getByTestId('search-button');
 
     userEvent.click(searchButton);
 
-    await waitFor(() => {
-      const searchInput = screen.getByTestId('search-input');
+    const searchInput = await screen.findByTestId('search-input');
+    expect(searchInput).toBeVisible();
 
-      expect(searchInput).toBeVisible();
-    });
+    userEvent.click(searchButton);
+
+    expect(searchInput).not.toBeVisible();
   });
 });
