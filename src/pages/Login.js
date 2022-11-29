@@ -1,8 +1,20 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 
 function Login() {
-  const { setPassword, setEmail, isDisabled } = useContext(AppContext);
+  const { email, setPassword, setEmail,
+    isDisabled } = useContext(AppContext);
+
+  const history = useHistory();
+
+  const handleSubmit = (userEmail) => {
+    const newObj = {
+      email: userEmail,
+    };
+    localStorage.setItem('user', JSON.stringify(newObj));
+    history.push('/meals');
+  };
   return (
     <form>
       <input
@@ -15,6 +27,7 @@ function Login() {
       <input
         data-testid="password-input"
         placeholder="Password"
+        type="password"
         onChange={ ({ target }) => {
           setPassword(target.value);
         } }
@@ -23,6 +36,7 @@ function Login() {
         type="button"
         data-testid="login-submit-btn"
         disabled={ isDisabled }
+        onClick={ () => handleSubmit(email) }
       >
         Enter
 
