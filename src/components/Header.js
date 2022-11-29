@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 function Header({ headerText, enableSearchButton }) {
@@ -8,10 +9,21 @@ function Header({ headerText, enableSearchButton }) {
     history.push('/profile');
   };
 
+  const [hideInput, setHideInput] = useState(false);
+
+  const hideInputOrNot = () => {
+    if (hideInput === false) {
+      setHideInput(true);
+    } if (hideInput === true) {
+      setHideInput(false);
+    }
+  };
+
   return (
     <header>
       <h1 data-testid="page-title">{headerText}</h1>
       <button
+        data-testid="profile-button"
         onClick={ redirectToProfile }
         type="button"
       >
@@ -21,12 +33,23 @@ function Header({ headerText, enableSearchButton }) {
           alt="profile icon"
         />
       </button>
+
+      { hideInput && (
+        <label htmlFor="search-input">
+          <input data-testid="search-input" type="text" id="search-input" />
+        </label>)}
       { enableSearchButton && (
-        <img
-          data-testid="search-top-btn"
-          src="src/images/searchIcon.svg"
-          alt="search top icon"
-        />
+        <button
+          type="button"
+          onClick={ hideInputOrNot }
+          data-testid="search-button"
+        >
+          <img
+            data-testid="search-top-btn"
+            src="src/images/searchIcon.svg"
+            alt="search top icon"
+          />
+        </button>
       ) }
     </header>
   );
