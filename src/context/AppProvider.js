@@ -23,7 +23,7 @@ function AppProvider({ children }) {
     email,
     setEmail,
     isDisabled,
-  }));
+  }), [email, isDisabled, password]);
 
   return (
     <AppContext.Provider value={ infos }>
