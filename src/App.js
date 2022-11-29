@@ -1,16 +1,17 @@
-import { Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import React from 'react';
 import './App.css';
-import Meals from './components/Meals';
-import Drinks from './components/Drinks';
-import Profile from './components/Profile';
-import DoneRecipes from './components/DoneRecipes';
-import FavoriteRecipes from './components/FavoriteRecipes';
+import Login from './Pages/Login';
+import Meals from './Pages/Meals';
+import Drinks from './Pages/Drinks';
+import Profile from './Pages/Profile';
+import DoneRecipes from './Pages/DoneRecipes';
+import FavoriteRecipes from './Pages/FavoriteRecipes';
 
 function App() {
   return (
     <BrowserRouter>
-      <Route exact path="/" />
+      <Route exact path="/" component={ Login } />
       <Route exact path="/meals" component={ Meals } />
       <Route path="/drinks" component={ Drinks } />
       <Route exact path="/meals/:id-da-receita" />

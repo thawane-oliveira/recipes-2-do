@@ -1,32 +1,31 @@
 import React from 'react';
-import { render, screen, userEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from '../App';
+import AppProvider from '../context/AppProvider';
+import renderWithRouter from '../services/renderWithRouter';
 
 describe('Testes do Header', () => {
-  it('Verifica se há um header com dois ícones, um deles tendo um botão. Ao clicar neste botão, o usuário deve ser direcionado para a página Profile', async () => {
-    render(<App />);
-
+  it('Verifica se ao clicar no botão de search aparece um input de pesquisa. O outro botão da tela, de profile, deve redirecionar a rota inicial meals', async () => {
+    const { history } = renderWithRouter(
+      <AppProvider>
+        <App />
+      </AppProvider>,
+    );
     const emailInput = screen.getByTestId('email-input');
     const passwordInput = screen.getByTestId('password-input');
     const loginButton = screen.getByTestId('login-submit-btn');
+    const { pathname } = history.location;
+    expect(pathname).toBe('/');
 
     userEvent.type(emailInput, 'gappy@soft.wet');
-    userEvent.type(passwordInput, 123456);
+    userEvent.type(passwordInput, '1234567');
     userEvent.click(loginButton);
 
     const profileButton = await screen.findByTestId('profile-button');
+    expect(profileButton).toBeVisible();
 
-    userEvent.click(profileButton);
-
-    const title = await screen.findByRole('heading', { name: /profile/i, level: 1 });
-
-    expect(title).toBeVisible();
-  });
-
-  it('Verifica se um input de pesquisa é exibido após clicar no botão de search. Clicando no botão de novo, esse input deve sumir', async () => {
-    render(<App />);
-
-    const searchButton = screen.getByTestId('search-button');
+    const searchButton = await screen.findByTestId('search-button');
 
     userEvent.click(searchButton);
 
@@ -36,5 +35,11 @@ describe('Testes do Header', () => {
     userEvent.click(searchButton);
 
     expect(searchInput).not.toBeVisible();
+
+    userEvent.click(profileButton);
+
+    const title = await screen.findByRole('heading', { name: /profile/i, level: 1 });
+
+    expect(title).toBeVisible();
   });
 });
