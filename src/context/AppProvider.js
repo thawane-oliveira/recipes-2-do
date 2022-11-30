@@ -3,7 +3,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState({
+  });
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
 
