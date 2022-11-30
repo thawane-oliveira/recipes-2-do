@@ -1,13 +1,21 @@
 // import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 import './style.css';
 // import { useState } from 'react';
-// import { useHistory } from 'react-router-dom';
 // import searchIcon from '../images/searchIcon.svg';
 
 function Footer() {
-  // const history = useHistory();
+  const history = useHistory();
+
+  const handleRedirMeals = () => {
+    history.push('/meals');
+  };
+
+  const handleRedirCocktails = () => {
+    history.push('/drinks');
+  };
 
   return (
     <footer
@@ -15,7 +23,7 @@ function Footer() {
     >
       <button
         type="button"
-        // onClick={ () => {} }
+        onClick={ () => handleRedirMeals() }
 
       >
         <img
@@ -26,7 +34,7 @@ function Footer() {
       </button>
       <button
         type="button"
-        // onClick={ () => {} }
+        onClick={ () => handleRedirCocktails() }
       >
         <img
           src={ drinkIcon }
