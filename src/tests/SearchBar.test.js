@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../services/renderWithRouter';
 
-describe('Testes do Header', () => {
-  it('Verifica se ao clicar no botão de search aparece um input de pesquisa. O outro botão da tela, de profile, deve redirecionar a rota inicial meals', async () => {
+describe('Testes do SearchBar', () => {
+  it('Verifica se ', async () => {
     const { history } = renderWithRouter(
       <App />,
     );
@@ -19,24 +19,18 @@ describe('Testes do Header', () => {
     userEvent.type(passwordInput, '1234567');
     userEvent.click(loginButton);
 
-    const profileButton = await screen.findByTestId('profile-button');
-    expect(profileButton).toBeVisible();
-
     const searchButton = await screen.findByTestId('search-button');
-
     userEvent.click(searchButton);
 
     const searchInput = await screen.findByTestId('search-input');
     expect(searchInput).toBeVisible();
+    userEvent.type(searchInput, 'chicken');
 
-    userEvent.click(searchButton);
+    const ingredientRadio = await screen.findByTestId('ingredient-search-radio');
+    expect(ingredientRadio).toBeInTheDocument();
+    userEvent.click(ingredientRadio);
 
-    expect(searchInput).not.toBeVisible();
-
-    userEvent.click(profileButton);
-
-    const title = await screen.findByRole('heading', { name: /profile/i, level: 1 });
-
-    expect(title).toBeVisible();
+    const filterSearchButton = await screen.findByTestId('exec-search-btn');
+    userEvent.click(filterSearchButton);
   });
 });

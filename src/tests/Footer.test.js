@@ -3,22 +3,24 @@ import { screen } from '@testing-library/react';
 // import userEvent from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import AppProvider from '../context/AppProvider';
 import renderWithRouter from '../services/renderWithRouter';
+
+const email = 'email-input';
+const password = 'password-input';
+const loginBtn = 'login-submit-btn';
+const userEmail = 'trybe@trybe.com';
 
 describe('Testa Footer', () => {
   it('Testa se os elementos aparecem na tela', () => {
     renderWithRouter(
-      <AppProvider>
-        <App />
-      </AppProvider>,
+      <App />,
     );
 
-    const emailInput = screen.getByTestId('email-input');
-    const passwordInput = screen.getByTestId('password-input');
-    const loginButton = screen.getByTestId('login-submit-btn');
+    const emailInput = screen.getByTestId(email);
+    const passwordInput = screen.getByTestId(password);
+    const loginButton = screen.getByTestId(loginBtn);
 
-    userEvent.type(emailInput, 'trybe@trybe.com');
+    userEvent.type(emailInput, userEmail);
     userEvent.type(passwordInput, '1234567');
     userEvent.click(loginButton);
 
@@ -31,10 +33,16 @@ describe('Testa Footer', () => {
 
   it('Testa se os icones de redirecionamento estão corretos', () => {
     renderWithRouter(
-      <AppProvider>
-        <App />
-      </AppProvider>,
+      <App />,
     );
+
+    const emailInput = screen.getByTestId(email);
+    const passwordInput = screen.getByTestId(password);
+    const loginButton = screen.getByTestId(loginBtn);
+
+    userEvent.type(emailInput, userEmail);
+    userEvent.type(passwordInput, '1234567');
+    userEvent.click(loginButton);
 
     const bntMeals = screen.getByRole('img', { name: /imag-meals/i });
     expect(bntMeals).toHaveAttribute('src', 'mealIcon.svg');
@@ -45,10 +53,16 @@ describe('Testa Footer', () => {
 
   it('Testa se o botao redireciona para /meals', async () => {
     renderWithRouter(
-      <AppProvider>
-        <App />
-      </AppProvider>,
+      <App />,
     );
+
+    const emailInput = screen.getByTestId(email);
+    const passwordInput = screen.getByTestId(password);
+    const loginButton = screen.getByTestId(loginBtn);
+
+    userEvent.type(emailInput, userEmail);
+    userEvent.type(passwordInput, '1234567');
+    userEvent.click(loginButton);
 
     const bntMeals = screen.getByRole('img', { name: /imag-meals/i });
     const btnDrinks = screen.getByRole('img', { name: /imag-drinkicon/i });

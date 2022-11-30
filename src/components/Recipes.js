@@ -3,7 +3,7 @@
 // import { useHistory } from 'react-router-dom';
 
 function Recipes() {
-//   const history = useHistory();
+  //   const history = useHistory();
 
   return (
     <h1>Meals</h1>
