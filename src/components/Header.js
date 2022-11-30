@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import profileIcon from '../images/profileIcon.svg';
+import searchIcon from '../images/searchIcon.svg';
 
 function Header({ headerText, enableSearchButton }) {
   const history = useHistory();
@@ -29,7 +31,7 @@ function Header({ headerText, enableSearchButton }) {
       >
         <img
           data-testid="profile-top-btn"
-          src="src/images/profileIcon.svg"
+          src={ profileIcon }
           alt="profile icon"
         />
       </button>
@@ -46,7 +48,7 @@ function Header({ headerText, enableSearchButton }) {
         >
           <img
             data-testid="search-top-btn"
-            src="src/images/searchIcon.svg"
+            src={ searchIcon }
             alt="search top icon"
           />
         </button>

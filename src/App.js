@@ -1,12 +1,12 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import React from 'react';
 import './App.css';
-import Login from './Pages/Login';
-import Meals from './Pages/Meals';
-import Drinks from './Pages/Drinks';
-import Profile from './Pages/Profile';
-import DoneRecipes from './Pages/DoneRecipes';
-import FavoriteRecipes from './Pages/FavoriteRecipes';
+import Login from './pages/Login';
+import Meals from './pages/Meals';
+import Drinks from './pages/Drinks';
+import Profile from './pages/Profile';
+import DoneRecipes from './pages/DoneRecipes';
+import FavoriteRecipes from './pages/FavoriteRecipes';
 
 function App() {
   return (
