@@ -2,13 +2,10 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
-// import requestCocktail from '../services/requestCocktail';
-// import requestMeal from '../services/requestMeal';
 
-function SearchBar(props) {
+function SearchBar() {
   const history = useHistory();
 
-  console.log(props);
   const {
     searchInput,
     setSearchInput,

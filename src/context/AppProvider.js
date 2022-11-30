@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import requestCocktail from '../services/requestCocktail';
 import requestMeal from '../services/requestMeal';
 import AppContext from './AppContext';
@@ -27,6 +28,8 @@ function AppProvider({ children }) {
     }
   }, [email, password]);
 
+  const history = useHistory();
+
   useEffect(() => {
     async function fetchApi() {
       const { searchText, typeOfSearch } = searchByFilter;
@@ -36,17 +39,25 @@ function AppProvider({ children }) {
       }
       if (path === '/drinks') {
         const fetch = await requestCocktail(searchText, typeOfSearch);
+        if (fetch.drinks.length === 1) {
+          const x = fetch.drinks[0].idDrink;
+          history.push(`/drinks/${x}`);
+        }
+        setRecipes(fetch.drinks);
         return fetch;
       }
       if (path === '/meals') {
         const fetch = await requestMeal(searchText, typeOfSearch);
-        console.log('fetch', fetch);
-        setRecipes(fetch);
+        if (fetch.meals.length === 1) {
+          const x = fetch.meals[0].idMeal;
+          history.push(`/meals/${x}`);
+        }
+        setRecipes(fetch.meals);
         return fetch;
       }
     }
     fetchApi();
-  });
+  }, [path, searchByFilter, history]);
 
   const infos = useMemo(() => ({
     password,
