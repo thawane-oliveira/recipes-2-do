@@ -6,7 +6,8 @@ import requestMeal from '../services/requestMeal';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState({
+  });
   const [email, setEmail] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [searchInput, setSearchInput] = useState('');
