@@ -4,7 +4,7 @@ import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 import './style.css';
 // import { useState } from 'react';
-// import searchIcon from '../images/searchIcon.svg';
+// import searchIcon from '../images/searchIcon.svg'
 
 function Footer() {
   const history = useHistory();
