@@ -1,8 +1,11 @@
-import React from 'react';
+import Header from '../components/Header';
 
 function Meals() {
   return (
-    <p>COMIDA</p>
+    <div>
+      <h1>x</h1>
+      <Header headerText="Meals" enableSearchButton />
+    </div>
   );
 }
 
