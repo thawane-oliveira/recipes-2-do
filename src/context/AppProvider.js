@@ -29,6 +29,24 @@ function AppProvider({ children }) {
   }, [email, password]);
 
   const history = useHistory();
+  // verificado sobre uso de history no componente "pai" em: https://flaviocopes.com/react-router-uselocation-usehistory-undefined/
+
+  const fetchAnswer = (fetch, url, id) => {
+    console.log(fetch, url, id);
+    if (fetch[url] === null) {
+      const advice = 'Sorry, we haven\'t found any recipes for these filters.';
+      global.alert(advice);
+      return;
+    }
+    if (fetch[url].length === 1) {
+      const x = fetch[url][0][id];
+      history.push(`/${url}/${x}`);
+      return;
+    }
+    if (fetch[url].length > 1) {
+      setRecipes(fetch[url]);
+    }
+  };
 
   useEffect(() => {
     async function fetchApi() {
@@ -39,21 +57,34 @@ function AppProvider({ children }) {
       }
       if (path === '/drinks') {
         const fetch = await requestCocktail(searchText, typeOfSearch);
-        if (fetch.drinks.length === 1) {
-          const x = fetch.drinks[0].idDrink;
-          history.push(`/drinks/${x}`);
-        }
-        setRecipes(fetch.drinks);
-        return fetch;
+        // if (fetch.drinks.length === 1) {
+        //   const x = fetch.drinks[0].idDrink;
+        //   history.push(`/drinks/${x}`);
+        // }
+        // if (fetch.drinks.length === 0) {
+        //   const advice = 'Sorry, we haven\'t found any recipes for these filters.';
+        //   global.alert(advice);
+        // }
+        // if (fetch.drinks.length > 1) {
+        //   setRecipes(fetch.drinks);
+        // }
+        fetchAnswer(fetch, 'drinks', 'idDrink');
       }
       if (path === '/meals') {
         const fetch = await requestMeal(searchText, typeOfSearch);
-        if (fetch.meals.length === 1) {
-          const x = fetch.meals[0].idMeal;
-          history.push(`/meals/${x}`);
-        }
-        setRecipes(fetch.meals);
-        return fetch;
+        console.log(fetch);
+        // if (fetch.meals.length === 1) {
+        //   const x = fetch.meals[0].idMeal;
+        //   history.push(`/meals/${x}`);
+        // }
+        // if (fetch.meals.length === 0) {
+        //   const advice = 'Sorry, we haven\'t found any recipes for these filters.';
+        //   return global.alert(advice);
+        // }
+        // setRecipes(fetch.meals);
+        // return fetch;
+
+        fetchAnswer(fetch, 'meals', 'idMeal');
       }
     }
     fetchApi();

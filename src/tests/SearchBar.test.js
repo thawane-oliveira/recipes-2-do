@@ -2,15 +2,12 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import AppProvider from '../context/AppProvider';
 import renderWithRouter from '../services/renderWithRouter';
 
 describe('Testes do SearchBar', () => {
   it('Verifica se ', async () => {
     const { history } = renderWithRouter(
-      <AppProvider>
-        <App />
-      </AppProvider>,
+      <App />,
     );
     const emailInput = screen.getByTestId('email-input');
     const passwordInput = screen.getByTestId('password-input');
@@ -32,5 +29,8 @@ describe('Testes do SearchBar', () => {
     const ingredientRadio = await screen.findByTestId('ingredient-search-radio');
     expect(ingredientRadio).toBeInTheDocument();
     userEvent.click(ingredientRadio);
+
+    const filterSearchButton = await screen.findByTestId('exec-search-btn');
+    userEvent.click(filterSearchButton);
   });
 });

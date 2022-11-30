@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import AppProvider from '../context/AppProvider';
 import renderWithRouter from '../services/renderWithRouter';
 
 const emailId = 'email-input';
@@ -11,9 +10,7 @@ const submitButtonId = 'login-submit-btn';
 
 test('Testa se os elementos aparecem na tela', () => {
   renderWithRouter(
-    <AppProvider>
-      <App />
-    </AppProvider>,
+    <App />,
   );
 
   const emailInput = screen.getByTestId(emailId);
@@ -27,10 +24,8 @@ test('Testa se os elementos aparecem na tela', () => {
 });
 
 test('Testa se a pagina Login esta funcionando de acordo com o esperado', () => {
-  render(
-    <AppProvider>
-      <App />
-    </AppProvider>,
+  renderWithRouter(
+    <App />,
   );
 
   const emailInput = screen.getByTestId(emailId);
@@ -45,9 +40,7 @@ test('Testa se a pagina Login esta funcionando de acordo com o esperado', () => 
 
 test('Testa se o botao redireciona para /meals', async () => {
   renderWithRouter(
-    <AppProvider>
-      <App />
-    </AppProvider>,
+    <App />,
   );
 
   const emailInput = screen.getByTestId(emailId);

@@ -2,15 +2,12 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
-import AppProvider from '../context/AppProvider';
 import renderWithRouter from '../services/renderWithRouter';
 
 describe('Testes do Header', () => {
   it('Verifica se ao clicar no botão de search aparece um input de pesquisa. O outro botão da tela, de profile, deve redirecionar a rota inicial meals', async () => {
     const { history } = renderWithRouter(
-      <AppProvider>
-        <App />
-      </AppProvider>,
+      <App />,
     );
     const emailInput = screen.getByTestId('email-input');
     const passwordInput = screen.getByTestId('password-input');
