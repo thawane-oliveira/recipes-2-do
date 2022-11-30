@@ -7,7 +7,7 @@ import './style.css';
 // import searchIcon from '../images/searchIcon.svg';
 
 function Footer() {
-  //   const history = useHistory();
+  // const history = useHistory();
 
   return (
     <footer
@@ -15,13 +15,24 @@ function Footer() {
     >
       <button
         type="button"
+        // onClick={ () => {} }
+
       >
-        <img src={ mealIcon } alt="imag-meals" data-testid="meals-bottom-btn" />
+        <img
+          src={ mealIcon }
+          alt="imag-meals"
+          data-testid="meals-bottom-btn"
+        />
       </button>
       <button
         type="button"
+        // onClick={ () => {} }
       >
-        <img src={ drinkIcon } alt="imag-drinkIcon" data-testid="drinks-bottom-btn" />
+        <img
+          src={ drinkIcon }
+          alt="imag-drinkIcon"
+          data-testid="drinks-bottom-btn"
+        />
       </button>
 
     </footer>
