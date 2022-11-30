@@ -32,18 +32,16 @@ function AppProvider({ children }) {
   // verificado sobre uso de history no componente "pai" em: https://flaviocopes.com/react-router-uselocation-usehistory-undefined/
 
   const fetchAnswer = (fetch, url, id) => {
-    console.log(fetch, url, id);
     if (fetch[url] === null) {
       const advice = 'Sorry, we haven\'t found any recipes for these filters.';
       global.alert(advice);
       return;
     }
     if (fetch[url].length === 1) {
+      setRecipes(fetch[url]);
       const x = fetch[url][0][id];
       history.push(`/${url}/${x}`);
-      return;
-    }
-    if (fetch[url].length > 1) {
+    } else if (fetch[url].length > 1) {
       setRecipes(fetch[url]);
     }
   };
@@ -52,38 +50,15 @@ function AppProvider({ children }) {
     async function fetchApi() {
       const { searchText, typeOfSearch } = searchByFilter;
       if (searchText.length > 1 && typeOfSearch === 'first-letter-search') {
-        const advice = global.alert('Your search must have only 1 (one) character');
-        return advice;
+        global.alert('Your search must have only 1 (one) character');
+        return;
       }
       if (path === '/drinks') {
         const fetch = await requestCocktail(searchText, typeOfSearch);
-        // if (fetch.drinks.length === 1) {
-        //   const x = fetch.drinks[0].idDrink;
-        //   history.push(`/drinks/${x}`);
-        // }
-        // if (fetch.drinks.length === 0) {
-        //   const advice = 'Sorry, we haven\'t found any recipes for these filters.';
-        //   global.alert(advice);
-        // }
-        // if (fetch.drinks.length > 1) {
-        //   setRecipes(fetch.drinks);
-        // }
         fetchAnswer(fetch, 'drinks', 'idDrink');
       }
       if (path === '/meals') {
         const fetch = await requestMeal(searchText, typeOfSearch);
-        console.log(fetch);
-        // if (fetch.meals.length === 1) {
-        //   const x = fetch.meals[0].idMeal;
-        //   history.push(`/meals/${x}`);
-        // }
-        // if (fetch.meals.length === 0) {
-        //   const advice = 'Sorry, we haven\'t found any recipes for these filters.';
-        //   return global.alert(advice);
-        // }
-        // setRecipes(fetch.meals);
-        // return fetch;
-
         fetchAnswer(fetch, 'meals', 'idMeal');
       }
     }
