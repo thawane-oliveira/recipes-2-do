@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState, useMemo } from 'react';
-// import { useHistory, useLocation } from 'react-router-dom';
-// import requestMeal from '../services/requestMeal';
+import requestCocktail from '../services/requestCocktail';
+import requestMeal from '../services/requestMeal';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
@@ -15,6 +15,7 @@ function AppProvider({ children }) {
     searchText: '',
     typeOfSearch: '',
   });
+  const [path, setPath] = useState('');
 
   useEffect(() => {
     const minLength = 6;
@@ -26,27 +27,26 @@ function AppProvider({ children }) {
     }
   }, [email, password]);
 
-  // const history = useHistory();
-
-  // useEffect(() => {
-  //   async function fetchApi() {
-  //     const { searchText, typeOfSearch } = searchByFilter;
-  //     if (pathname === '/drinks') {
-  //       const fetch = await requestMeal(searchText, typeOfSearch);
-  //       return fetch;
-  //     }
-  //     if (pathname === '/meals') {
-  //       const fetch = await requestMeal(searchText, typeOfSearch);
-  //       setRecipes(fetch);
-  //       return fetch;
-  //     }
-  //     if (searchText.length > 1 && typeOfSearch === 'first-letter-search') {
-  //       const advice = global.alert('Your search must have only 1 (one) character');
-  //       return advice;
-  //     }
-  //   }
-  //   fetchApi();
-  // }, [searchByFilter]);
+  useEffect(() => {
+    async function fetchApi() {
+      const { searchText, typeOfSearch } = searchByFilter;
+      if (searchText.length > 1 && typeOfSearch === 'first-letter-search') {
+        const advice = global.alert('Your search must have only 1 (one) character');
+        return advice;
+      }
+      if (path === '/drinks') {
+        const fetch = await requestCocktail(searchText, typeOfSearch);
+        return fetch;
+      }
+      if (path === '/meals') {
+        const fetch = await requestMeal(searchText, typeOfSearch);
+        console.log('fetch', fetch);
+        setRecipes(fetch);
+        return fetch;
+      }
+    }
+    fetchApi();
+  });
 
   const infos = useMemo(() => ({
     password,
@@ -62,6 +62,8 @@ function AppProvider({ children }) {
     setSearchByFilter,
     recipes,
     setRecipes,
+    path,
+    setPath,
   }), [
     email,
     isDisabled,
@@ -72,6 +74,8 @@ function AppProvider({ children }) {
     setSearchInput,
     recipes,
     setRecipes,
+    path,
+    setPath,
   ]);
 
   return (

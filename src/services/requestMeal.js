@@ -1,15 +1,16 @@
 const requestMeal = async (searchText, typeOfSearch) => {
+  console.log('cypress', searchText, typeOfSearch);
+
   if (typeOfSearch === 'first-letter-search') {
     const url = `https://www.themealdb.com/api/json/v1/1/search.php?f=${searchText}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     return data;
   }
   if (typeOfSearch === 'ingredient-search') {
     const url = `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchText}`;
-    console.log('url', url);
     const response = await fetch(url);
+    console.log(url);
     const data = await response.json();
     return data;
   }

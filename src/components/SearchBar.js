@@ -1,19 +1,21 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
-import requestMeal from '../services/requestMeal';
-// import { useHistory } from 'react-router-dom';
+// import requestCocktail from '../services/requestCocktail';
+// import requestMeal from '../services/requestMeal';
 
-function SearchBar({ headerText }) {
-  // const history = useHistory();
+function SearchBar(props) {
+  const history = useHistory();
 
+  console.log(props);
   const {
     searchInput,
     setSearchInput,
     radioOption,
     setRadioOption,
-    searchByFilter,
     setSearchByFilter,
+    setPath,
   } = useContext(AppContext);
 
   const onInputChange = ({ target }) => {
@@ -25,25 +27,11 @@ function SearchBar({ headerText }) {
   };
 
   const clickSearchButton = async () => {
+    setPath(history.location.pathname);
     setSearchByFilter({
       searchText: searchInput,
       typeOfSearch: radioOption,
     });
-
-    const { searchText, typeOfSearch } = searchByFilter;
-
-    if (headerText === 'Drinks') {
-      const fetch = await requestCocktail(searchText, typeOfSearch);
-      return fetch;
-    }
-    if (headerText === 'Meals') {
-      const fetch = await requestMeal(searchText, typeOfSearch);
-      return fetch;
-    }
-    if (searchText.length > 1 && typeOfSearch === 'first-letter-search') {
-      const advice = global.alert('Your search must have only 1 (one) character');
-      return advice;
-    }
   };
 
   return (
@@ -106,8 +94,8 @@ function SearchBar({ headerText }) {
   );
 }
 
-SearchBar.propTypes = {
-  headerText: PropTypes.string.isRequired,
-};
+// SearchBar.propTypes = {
+//   headerText: PropTypes.string.isRequired,
+// };
 
 export default SearchBar;
