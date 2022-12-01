@@ -18,6 +18,10 @@ function AppProvider({ children }) {
     typeOfSearch: '',
   });
   const [path, setPath] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [initialRecipes, setInitialRecipes] = useState([]);
+  const [isCategory, setIsCategory] = useState(false);
+  const [verifyCategory, setVerifyCategory] = useState('');
 
   useEffect(() => {
     const minLength = 6;
@@ -82,6 +86,14 @@ function AppProvider({ children }) {
     setRecipes,
     path,
     setPath,
+    categories,
+    setCategories,
+    initialRecipes,
+    setInitialRecipes,
+    isCategory,
+    setIsCategory,
+    verifyCategory,
+    setVerifyCategory,
   }), [
     email,
     isDisabled,
@@ -94,6 +106,14 @@ function AppProvider({ children }) {
     setRecipes,
     path,
     setPath,
+    categories,
+    setCategories,
+    initialRecipes,
+    setInitialRecipes,
+    isCategory,
+    setIsCategory,
+    verifyCategory,
+    setVerifyCategory,
   ]);
 
   return (
