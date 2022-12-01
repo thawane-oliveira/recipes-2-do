@@ -34,7 +34,6 @@ function Recipes({ headerText }) {
     if (headerText === 'Meals') {
       const mealCategoryFilter = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${target.value}`);
       const mealData = await mealCategoryFilter.json();
-      console.log(mealData.meals);
       setInitialRecipes(mealData.meals);
       setIsCategory(true);
       setVerifyCategory(target.value);
@@ -46,7 +45,6 @@ function Recipes({ headerText }) {
     if (headerText === 'Drinks') {
       const drinkCategoryFilter = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${target.value}`);
       const drinkData = await drinkCategoryFilter.json();
-      console.log(drinkData.drinks);
       setInitialRecipes(drinkData.drinks);
       setIsCategory(true);
       setVerifyCategory(target.value);
@@ -117,7 +115,8 @@ function Recipes({ headerText }) {
             index={ index }
             key={ recipe.idMeal || recipe.idDrink }
             title={ recipe.strMeal || recipe.strDrink }
-            id={ recipe.idDrink }
+            id={ recipe.idMeal || recipe.idDrink }
+            headerText={ headerText }
           />
         ))}
 
@@ -127,8 +126,10 @@ function Recipes({ headerText }) {
         .map((recipe, index) => (
           <Card
             photo={ recipe.strMealThumb || recipe.strDrinkThumb }
+            headerText={ headerText }
             index={ index }
             key={ recipe.idMeal || recipe.idDrink }
+            id={ recipe.idMeal || recipe.idDrink }
             title={ recipe.strMeal || recipe.strDrink }
           />
         ))}
