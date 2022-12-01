@@ -6,7 +6,11 @@ import Header from './Header';
 function Profile() {
   const history = useHistory();
 
-  const email = JSON.parse(localStorage.getItem('user'));
+  const getEmail = () => {
+    const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+    if (!userLocalStorage) return 'Usuário não logado';
+    return userLocalStorage.email;
+  };
 
   const toDoneRecipes = () => {
     history.push('/done-recipes');
@@ -29,7 +33,7 @@ function Profile() {
 
       <Header headerText="Profile" enableSearchButton={ false } />
 
-      <p data-testid="profile-email">{email.email}</p>
+      <p data-testid="profile-email">{getEmail()}</p>
 
       <button
         data-testid="profile-done-btn"

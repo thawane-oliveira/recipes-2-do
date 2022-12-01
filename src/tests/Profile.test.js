@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 import App from '../App';
 import renderWithRouter from '../services/renderWithRouter';
 
@@ -73,5 +74,16 @@ describe('Testes do componente Profile', () => {
     const logoutBtn = await screen.findByTestId('profile-logout-btn');
 
     userEvent.click(logoutBtn);
+  });
+
+  it('Verifica se ao entrar direto na rota profile sem logar, é exibido Usuário não logado', async () => {
+    const { history } = renderWithRouter(
+      <App />,
+    );
+
+    act(() => history.push('/profile'));
+
+    const profileEmail = await screen.findByTestId('profile-email');
+    expect(profileEmail).toHaveTextContent('Usuário não logado');
   });
 });
