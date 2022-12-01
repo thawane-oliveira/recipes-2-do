@@ -18,6 +18,8 @@ function AppProvider({ children }) {
     typeOfSearch: '',
   });
   const [path, setPath] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [initialRecipes, setInitialRecipes] = useState([]);
 
   useEffect(() => {
     const minLength = 6;
@@ -48,6 +50,7 @@ function AppProvider({ children }) {
   };
 
   useEffect(() => {
+    console.log('fiz fetch');
     async function fetchApi() {
       const { searchText, typeOfSearch } = searchByFilter;
       if (searchText.length > 1 && typeOfSearch === 'first-letter-search') {
@@ -82,6 +85,10 @@ function AppProvider({ children }) {
     setRecipes,
     path,
     setPath,
+    categories,
+    setCategories,
+    initialRecipes,
+    setInitialRecipes,
   }), [
     email,
     isDisabled,
@@ -94,6 +101,10 @@ function AppProvider({ children }) {
     setRecipes,
     path,
     setPath,
+    categories,
+    setCategories,
+    initialRecipes,
+    setInitialRecipes,
   ]);
 
   return (

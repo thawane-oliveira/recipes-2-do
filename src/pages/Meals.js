@@ -1,17 +1,19 @@
-import { useContext } from 'react';
+// import { useContext } from 'react';
 import Header from '../components/Header';
-import AppContext from '../context/AppContext';
+import Recipes from '../components/Recipes';
+// import AppContext from '../context/AppContext';
 
 function Meals() {
-  const {
-    recipes,
-  } = useContext(AppContext);
-  const magicNumber = 12;
+  // const {
+  //   recipes,
+  // } = useContext(AppContext);
+  // const magicNumber = 12;
 
   return (
     <div>
       <Header headerText="Meals" enableSearchButton />
-      {
+      <Recipes headerText="Meals" />
+      {/* {
         recipes.filter((_item, index) => index < magicNumber)
           .map((recipe, index) => (
             <div key={ recipe.strMeal }>
@@ -28,7 +30,7 @@ function Meals() {
               <p data-testid={ `${index}-recipe-card` }>x</p>
             </div>
           ))
-      }
+      } */}
     </div>
   );
 }
