@@ -21,7 +21,7 @@ function Recipes({ headerText }) {
   //   setCategories(allCategories);
   // };
 
-  const buttonFetch = (e) => console.log(e.target.innerText);
+  const buttonFetch = (e) => console.log(e.target.value);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -58,10 +58,11 @@ function Recipes({ headerText }) {
 
           .map((recipe) => (
             <button
-              key={ recipe }
               data-testid={ `${recipe}-category-filter` }
-              type="button"
+              key={ recipe }
               onClick={ buttonFetch }
+              type="button"
+              value={ recipe }
             >
               {recipe}
             </button>

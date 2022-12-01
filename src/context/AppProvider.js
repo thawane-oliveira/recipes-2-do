@@ -50,7 +50,6 @@ function AppProvider({ children }) {
   };
 
   useEffect(() => {
-    console.log('fiz fetch');
     async function fetchApi() {
       const { searchText, typeOfSearch } = searchByFilter;
       if (searchText.length > 1 && typeOfSearch === 'first-letter-search') {
