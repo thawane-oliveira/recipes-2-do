@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 function Card({ index, photo, title }) {
   return (
-    <div>
+    <div data-testid={ `${index}-recipe-card` }>
       <h3
         data-testid={ `${index}-card-name` }
       >
@@ -13,7 +13,6 @@ function Card({ index, photo, title }) {
         data-testid={ `${index}-card-img` }
         alt={ title }
       />
-      <p data-testid={ `${index}-recipe-card` } />
     </div>
   );
 }

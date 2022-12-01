@@ -13,6 +13,8 @@ function Recipes({ headerText }) {
     setRecipes,
     isCategory,
     setIsCategory,
+    verifyCategory,
+    setVerifyCategory,
   } = useContext(AppContext);
 
   const magicNumber = 12;
@@ -23,6 +25,11 @@ function Recipes({ headerText }) {
   //   setCategories(allCategories);
   // };
 
+  const clearFilters = () => {
+    setIsCategory(false);
+    setRecipes(recipes);
+  };
+
   const buttonFetch = async ({ target }) => {
     if (headerText === 'Meals') {
       const mealCategoryFilter = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${target.value}`);
@@ -30,6 +37,11 @@ function Recipes({ headerText }) {
       console.log(mealData.meals);
       setInitialRecipes(mealData.meals);
       setIsCategory(true);
+      setVerifyCategory(target.value);
+      if (verifyCategory === target.value) {
+        setIsCategory(false);
+        setRecipes(recipes);
+      }
     }
     if (headerText === 'Drinks') {
       const drinkCategoryFilter = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${target.value}`);
@@ -37,11 +49,12 @@ function Recipes({ headerText }) {
       console.log(drinkData.drinks);
       setInitialRecipes(drinkData.drinks);
       setIsCategory(true);
+      setVerifyCategory(target.value);
+      if (verifyCategory === target.value) {
+        setIsCategory(false);
+        setRecipes(recipes);
+      }
     }
-  };
-
-  const clearFilters = () => {
-    setIsCategory(false);
   };
 
   useEffect(() => {
@@ -104,6 +117,7 @@ function Recipes({ headerText }) {
             index={ index }
             key={ recipe.idMeal || recipe.idDrink }
             title={ recipe.strMeal || recipe.strDrink }
+            id={ recipe.idDrink }
           />
         ))}
 
