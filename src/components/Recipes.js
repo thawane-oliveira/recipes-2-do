@@ -7,10 +7,12 @@ function Recipes({ headerText }) {
   const {
     categories,
     setCategories,
-    // initialRecipes,
+    initialRecipes,
     setInitialRecipes,
     recipes,
     setRecipes,
+    isCategory,
+    setIsCategory,
   } = useContext(AppContext);
 
   const magicNumber = 12;
@@ -21,14 +23,32 @@ function Recipes({ headerText }) {
   //   setCategories(allCategories);
   // };
 
-  const buttonFetch = (e) => console.log(e.target.value);
+  const buttonFetch = async ({ target }) => {
+    if (headerText === 'Meals') {
+      const mealCategoryFilter = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${target.value}`);
+      const mealData = await mealCategoryFilter.json();
+      console.log(mealData.meals);
+      setInitialRecipes(mealData.meals);
+      setIsCategory(true);
+    }
+    if (headerText === 'Drinks') {
+      const drinkCategoryFilter = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${target.value}`);
+      const drinkData = await drinkCategoryFilter.json();
+      console.log(drinkData.drinks);
+      setInitialRecipes(drinkData.drinks);
+      setIsCategory(true);
+    }
+  };
+
+  const clearFilters = () => {
+    setIsCategory(false);
+  };
 
   useEffect(() => {
     const fetchRecipes = async () => {
       if (headerText === 'Meals') {
         const mealResponse = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const mealData = await mealResponse.json();
-        setInitialRecipes(mealData.meals);
         setRecipes(mealData.meals);
 
         const categoryMealResponse = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
@@ -38,7 +58,6 @@ function Recipes({ headerText }) {
       } else if (headerText === 'Drinks') {
         const drinkResponse = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const drinkData = await drinkResponse.json();
-        setInitialRecipes(drinkData.drinks);
         setRecipes(drinkData.drinks);
 
         const categoryDrinkResponse = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
@@ -48,7 +67,7 @@ function Recipes({ headerText }) {
       }
     };
     fetchRecipes();
-  }, [headerText]);
+  }, [headerText, setCategories, setRecipes]);
 
   return (
     <div>
@@ -68,7 +87,27 @@ function Recipes({ headerText }) {
             </button>
           ))
       }
-      {recipes
+      <button
+        data-testid="All-category-filter"
+        onClick={ clearFilters }
+        type="button"
+      >
+        All
+      </button>
+
+      {isCategory === true && initialRecipes
+        .filter((_item, index) => index < magicNumber)
+
+        .map((recipe, index) => (
+          <Card
+            photo={ recipe.strMealThumb || recipe.strDrinkThumb }
+            index={ index }
+            key={ recipe.idMeal || recipe.idDrink }
+            title={ recipe.strMeal || recipe.strDrink }
+          />
+        ))}
+
+      {isCategory === false && recipes
         .filter((_item, index) => index < magicNumber)
 
         .map((recipe, index) => (

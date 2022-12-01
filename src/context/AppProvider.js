@@ -20,7 +20,7 @@ function AppProvider({ children }) {
   const [path, setPath] = useState('');
   const [categories, setCategories] = useState([]);
   const [initialRecipes, setInitialRecipes] = useState([]);
-
+  const [isCategory, setIsCategory] = useState(false);
   useEffect(() => {
     const minLength = 6;
     const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -88,6 +88,8 @@ function AppProvider({ children }) {
     setCategories,
     initialRecipes,
     setInitialRecipes,
+    isCategory,
+    setIsCategory,
   }), [
     email,
     isDisabled,
@@ -104,6 +106,8 @@ function AppProvider({ children }) {
     setCategories,
     initialRecipes,
     setInitialRecipes,
+    isCategory,
+    setIsCategory,
   ]);
 
   return (
