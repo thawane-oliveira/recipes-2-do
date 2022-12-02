@@ -2,7 +2,7 @@
 import { useHistory } from 'react-router-dom';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
-import './style.css';
+import './styles/style.css';
 // import { useState } from 'react';
 // import searchIcon from '../images/searchIcon.svg'
 

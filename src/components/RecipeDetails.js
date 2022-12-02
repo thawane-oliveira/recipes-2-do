@@ -1,6 +1,8 @@
 import { useHistory } from 'react-router-dom';
 import { useEffect, useContext } from 'react';
 import AppContext from '../context/AppContext';
+import MerryGoRound from './MerryGoRound';
+import './styles/style.css';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -9,7 +11,6 @@ function RecipeDetails() {
     setRecipeDetail,
     ingredients,
     setIngredients,
-    // recommend,
     setRecommend,
   } = useContext(AppContext);
 
@@ -67,6 +68,7 @@ function RecipeDetails() {
   useEffect(() => {
     const recipeId = history.location.pathname;
     const splitedId = recipeId.split('/')[2];
+    const maxRecommendation = 6;
 
     const verifyPath = async () => {
       if (recipeId.includes('meals')) {
@@ -77,7 +79,7 @@ function RecipeDetails() {
 
         const response2 = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const data2 = await response2.json();
-        setRecommend(data2.drinks);
+        setRecommend(data2.drinks.slice(0, maxRecommendation));
       }
       if (recipeId.includes('drinks')) {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
@@ -87,7 +89,7 @@ function RecipeDetails() {
 
         const response2 = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const data2 = await response2.json();
-        setRecommend(data2.meals);
+        setRecommend(data2.meals.slice(0, maxRecommendation));
       }
     };
     verifyPath();
@@ -129,12 +131,20 @@ function RecipeDetails() {
                 title={ item.strMeal }
                 width="420"
                 height="315"
-                src={ item.strYoutube?.replace('watch?v=', 'embed/') }
+                src={ item.strYoutube?.replace('watch?v=', 'embed/') } // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
               />
             )
           }
+          <MerryGoRound />
         </div>
       ))}
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        className="start-recipe-btn"
+      >
+        Start Recipe
+      </button>
     </>
   );
 }
