@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
 import Card from './Card';
+import Loading from './Loading';
 
 function Recipes({ headerText }) {
   const {
@@ -15,6 +16,8 @@ function Recipes({ headerText }) {
     setIsCategory,
     verifyCategory,
     setVerifyCategory,
+    setLoading,
+    loading,
   } = useContext(AppContext);
 
   const magicNumber = 12;
@@ -37,6 +40,7 @@ function Recipes({ headerText }) {
       setInitialRecipes(mealData.meals);
       setIsCategory(true);
       setVerifyCategory(target.value);
+      setLoading(false);
       if (verifyCategory === target.value) {
         setIsCategory(false);
         setRecipes(recipes);
@@ -48,9 +52,11 @@ function Recipes({ headerText }) {
       setInitialRecipes(drinkData.drinks);
       setIsCategory(true);
       setVerifyCategory(target.value);
+      setLoading(false);
       if (verifyCategory === target.value) {
         setIsCategory(false);
         setRecipes(recipes);
+        setLoading(false);
       }
     }
   };
@@ -61,20 +67,24 @@ function Recipes({ headerText }) {
         const mealResponse = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const mealData = await mealResponse.json();
         setRecipes(mealData.meals);
+        setLoading(false);
 
         const categoryMealResponse = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
         const categoryMealData = await categoryMealResponse.json();
         const mealDataArray = categoryMealData.meals.map((item) => item.strCategory);
         setCategories(mealDataArray);
+        setLoading(false);
       } else if (headerText === 'Drinks') {
         const drinkResponse = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const drinkData = await drinkResponse.json();
         setRecipes(drinkData.drinks);
+        setLoading(false);
 
         const categoryDrinkResponse = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
         const categoryDrinkData = await categoryDrinkResponse.json();
         const drinkDataArray = categoryDrinkData.drinks.map((item) => item.strCategory);
         setCategories(drinkDataArray);
+        setLoading(false);
       }
     };
     fetchRecipes();
@@ -82,7 +92,7 @@ function Recipes({ headerText }) {
 
   return (
     <div>
-      {
+      { loading ? <Loading /> : (
         categories
           .filter((_item, index) => index < maxButton)
 
@@ -96,8 +106,7 @@ function Recipes({ headerText }) {
             >
               {recipe}
             </button>
-          ))
-      }
+          )))}
       <button
         data-testid="All-category-filter"
         onClick={ clearFilters }
@@ -106,33 +115,35 @@ function Recipes({ headerText }) {
         All
       </button>
 
-      {isCategory === true && initialRecipes
-        .filter((_item, index) => index < magicNumber)
+      { loading ? <Loading /> : (
+        isCategory === true && initialRecipes
+          .filter((_item, index) => index < magicNumber)
 
-        .map((recipe, index) => (
-          <Card
-            photo={ recipe.strMealThumb || recipe.strDrinkThumb }
-            index={ index }
-            key={ recipe.idMeal || recipe.idDrink }
-            title={ recipe.strMeal || recipe.strDrink }
-            id={ recipe.idMeal || recipe.idDrink }
-            headerText={ headerText }
-          />
-        ))}
+          .map((recipe, index) => (
+            <Card
+              photo={ recipe.strMealThumb || recipe.strDrinkThumb }
+              index={ index }
+              key={ recipe.idMeal || recipe.idDrink }
+              title={ recipe.strMeal || recipe.strDrink }
+              id={ recipe.idMeal || recipe.idDrink }
+              headerText={ headerText }
+            />
+          )))}
 
-      {isCategory === false && recipes
-        .filter((_item, index) => index < magicNumber)
+      { loading ? <Loading /> : (
+        isCategory === false && recipes
+          .filter((_item, index) => index < magicNumber)
 
-        .map((recipe, index) => (
-          <Card
-            photo={ recipe.strMealThumb || recipe.strDrinkThumb }
-            headerText={ headerText }
-            index={ index }
-            key={ recipe.idMeal || recipe.idDrink }
-            id={ recipe.idMeal || recipe.idDrink }
-            title={ recipe.strMeal || recipe.strDrink }
-          />
-        ))}
+          .map((recipe, index) => (
+            <Card
+              photo={ recipe.strMealThumb || recipe.strDrinkThumb }
+              headerText={ headerText }
+              index={ index }
+              key={ recipe.idMeal || recipe.idDrink }
+              id={ recipe.idMeal || recipe.idDrink }
+              title={ recipe.strMeal || recipe.strDrink }
+            />
+          )))}
     </div>
 
   );
