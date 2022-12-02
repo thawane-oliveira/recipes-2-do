@@ -3,6 +3,7 @@ import { useEffect, useContext } from 'react';
 import AppContext from '../context/AppContext';
 import MerryGoRound from './MerryGoRound';
 import './styles/style.css';
+import Loading from './Loading';
 
 function RecipeDetails() {
   const history = useHistory();
@@ -12,6 +13,8 @@ function RecipeDetails() {
     ingredients,
     setIngredients,
     setRecommend,
+    setLoading,
+    loading,
   } = useContext(AppContext);
 
   //   const ingredientsAndMeasures = (detailRecipe) => {
@@ -80,6 +83,7 @@ function RecipeDetails() {
         const response2 = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const data2 = await response2.json();
         setRecommend(data2.drinks.slice(0, maxRecommendation));
+        setLoading(false);
       }
       if (recipeId.includes('drinks')) {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
@@ -90,6 +94,7 @@ function RecipeDetails() {
         const response2 = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
         const data2 = await response2.json();
         setRecommend(data2.meals.slice(0, maxRecommendation));
+        setLoading(false);
       }
     };
     verifyPath();
@@ -98,46 +103,47 @@ function RecipeDetails() {
   return (
     <>
 
-      {recipeDetail.map((item) => (
-        <div key={ item.strMeal || item.strDrink }>
-          <h3 data-testid="recipe-title">{item.strMeal || item.strDrink}</h3>
-          <h4 data-testid="recipe-category">
+      {loading ? <Loading /> : (
+        recipeDetail.map((item) => (
+          <div key={ item.strMeal || item.strDrink }>
+            <h3 data-testid="recipe-title">{item.strMeal || item.strDrink}</h3>
+            <h4 data-testid="recipe-category">
+              {
+                item.strAlcoholic
+                  ? `${item.strCategory} - ${item.strAlcoholic}`
+                  : item.strCategory
+              }
+            </h4>
+            <img
+              src={ item.strMealThumb || item.strDrinkThumb }
+              data-testid="recipe-photo"
+              alt={ item.strMealThumb || item.strDrinkThumb }
+            />
+            <ul>
+              {ingredients.map((el, index) => (
+                <li
+                  data-testid={ `${index}-ingredient-name-and-measure` }
+                  key={ Math.random() }
+                >
+                  {el}
+                </li>
+              ))}
+            </ul>
+            <p data-testid="instructions">{item.strInstructions}</p>
             {
-              item.strAlcoholic
-                ? `${item.strCategory} - ${item.strAlcoholic}`
-                : item.strCategory
+              history.location.pathname.includes('meals') && (
+                <iframe
+                  data-testid="video"
+                  title={ item.strMeal }
+                  width="420"
+                  height="315"
+                  src={ item.strYoutube?.replace('watch?v=', 'embed/') } // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
+                />
+              )
             }
-          </h4>
-          <img
-            src={ item.strMealThumb || item.strDrinkThumb }
-            data-testid="recipe-photo"
-            alt={ item.strMealThumb || item.strDrinkThumb }
-          />
-          <ul>
-            {ingredients.map((el, index) => (
-              <li
-                data-testid={ `${index}-ingredient-name-and-measure` }
-                key={ Math.random() }
-              >
-                {el}
-              </li>
-            ))}
-          </ul>
-          <p data-testid="instructions">{item.strInstructions}</p>
-          {
-            history.location.pathname.includes('meals') && (
-              <iframe
-                data-testid="video"
-                title={ item.strMeal }
-                width="420"
-                height="315"
-                src={ item.strYoutube?.replace('watch?v=', 'embed/') } // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
-              />
-            )
-          }
-          <MerryGoRound />
-        </div>
-      ))}
+            {loading ? <Loading /> : (<MerryGoRound />)}
+          </div>
+        )))}
       <button
         type="button"
         data-testid="start-recipe-btn"
