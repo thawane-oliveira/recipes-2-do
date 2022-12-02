@@ -68,6 +68,18 @@ function RecipeDetails() {
     // função acima feita depois de auxílio do Sumo na mentoria de 01/12, para a lógica de como pegar chaves e valores dos ingredientes/medidas
   };
 
+  const redirectToProgress = () => {
+    const recipeId = history.location.pathname;
+    const splitedId = recipeId.split('/')[2];
+
+    if (recipeId.includes('meals')) {
+      history.push(`/meals/${splitedId}/in-progress`);
+    }
+    if (recipeId.includes('drinks')) {
+      history.push(`/drinks/${splitedId}/in-progress`);
+    }
+  };
+
   useEffect(() => {
     const recipeId = history.location.pathname;
     const splitedId = recipeId.split('/')[2];
@@ -144,13 +156,28 @@ function RecipeDetails() {
             {loading ? <Loading /> : (<MerryGoRound />)}
           </div>
         )))}
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        className="start-recipe-btn"
-      >
-        Start Recipe
-      </button>
+      <div>
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          className="start-recipe-btn"
+          onClick={ redirectToProgress }
+        >
+          Start Recipe
+        </button>
+        <button
+          type="button"
+          data-testid="share-btn"
+        >
+          Share Recipe
+        </button>
+        <button
+          type="button"
+          data-testid="favorite-btn"
+        >
+          Favorite Recipe
+        </button>
+      </div>
     </>
   );
 }
