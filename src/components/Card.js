@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import RecipeDetails from './RecipeDetails';
 
 function Card({ index, photo, title, id, headerText }) {
   const verifyId = () => {
     if (headerText === 'Meals') {
+      <RecipeDetails id={ id } />;
       return `/meals/${id}`;
     }
     if (headerText === 'Drinks') {
+      <RecipeDetails id={ id } />;
       return `/drinks/${id}`;
     }
   };

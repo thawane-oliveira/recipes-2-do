@@ -22,6 +22,8 @@ function AppProvider({ children }) {
   const [initialRecipes, setInitialRecipes] = useState([]);
   const [isCategory, setIsCategory] = useState(false);
   const [verifyCategory, setVerifyCategory] = useState('');
+  const [recipeDetail, setRecipeDetail] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     const minLength = 6;
@@ -94,6 +96,10 @@ function AppProvider({ children }) {
     setIsCategory,
     verifyCategory,
     setVerifyCategory,
+    recipeDetail,
+    setRecipeDetail,
+    ingredients,
+    setIngredients,
   }), [
     email,
     isDisabled,
@@ -114,6 +120,10 @@ function AppProvider({ children }) {
     setIsCategory,
     verifyCategory,
     setVerifyCategory,
+    recipeDetail,
+    setRecipeDetail,
+    ingredients,
+    setIngredients,
   ]);
 
   return (
