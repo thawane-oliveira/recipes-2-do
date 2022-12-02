@@ -1,6 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import { screen, cleanup, act, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../services/renderWithRouter';
@@ -11,6 +10,12 @@ const email = 'email-input';
 const password = 'password-input';
 const loginBtn = 'login-submit-btn';
 const userEmail = 'trybe@trybe.com';
+const cocktailButtonId = 'Cocktail-category-filter';
+
+afterEach(() => {
+  jest.clearAllMocks();
+  cleanup();
+});
 
 describe('Testes do componente Recipes', () => {
   it('Testa se ao entrar na rota /meals, são exibidas opções de comida e 5 botões de categorias', async () => {
@@ -58,7 +63,11 @@ describe('Testes do componente Recipes', () => {
       <App />,
     );
 
-    const emailInput = screen.getByTestId(email);
+    act(() => {
+      history.push('/drinks');
+    });
+
+    /* const emailInput = screen.getByTestId(email);
     const passwordInput = screen.getByTestId(password);
     const loginButton = screen.getByTestId(loginBtn);
 
@@ -67,7 +76,7 @@ describe('Testes do componente Recipes', () => {
     userEvent.click(loginButton);
 
     const drinkButton = screen.getByTestId('drinks-bottom-btn');
-    userEvent.click(drinkButton);
+    userEvent.click(drinkButton); */
 
     const drinkTitle = screen.getByRole('heading', { name: /drinks/i });
     expect(drinkTitle).toBeVisible();
@@ -78,8 +87,12 @@ describe('Testes do componente Recipes', () => {
     // expect(initialRecipeImg).toHaveAttribute('src', 'https://www.thecocktaildb.com/images/media/drink/vyxwut1468875960.jpg');
     // expect(initialRecipeImg).toHaveAttribute('alt', 'GG');
 
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
     // const ordinaryButton = screen.getByTestId('Ordinary Drink-category-filter');
-    const cocktailButton = await screen.findByTestId('Cocktail-category-filter');
+    const cocktailButton = await screen.findByTestId(cocktailButtonId);
     const shakeButton = await screen.findByTestId('Shake-category-filter');
     const otherButton = await screen.findByTestId('Other/Unknown-category-filter');
     const cocoaButton = await screen.findByTestId('Cocoa-category-filter');
@@ -125,7 +138,7 @@ describe('Testes do componente Recipes', () => {
       <App />,
     );
 
-    const emailInput = screen.getByTestId(email);
+    /* const emailInput = screen.getByTestId(email);
     const passwordInput = screen.getByTestId(password);
     const loginButton = screen.getByTestId(loginBtn);
 
@@ -134,19 +147,77 @@ describe('Testes do componente Recipes', () => {
     userEvent.click(loginButton);
 
     const drinkButton = screen.getByTestId('drinks-bottom-btn');
-    userEvent.click(drinkButton);
+    userEvent.click(drinkButton); */
+
+    act(() => {
+      history.push('/drinks');
+    });
 
     const drinkTitle = screen.getByRole('heading', { name: /drinks/i });
     expect(drinkTitle).toBeVisible();
 
     expect(history.location.pathname).toBe('/drinks');
 
-    const cocktailButton = await screen.findByTestId('Cocktail-category-filter');
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    const cocktailButton = await screen.findByTestId(cocktailButtonId);
     userEvent.click(cocktailButton);
 
     const cocktail = screen.getByRole('heading', { name: /gg/i });
     expect(cocktail).toBeVisible();
 
     userEvent.click(cocktailButton);
+  });
+
+  it('Verifica se o toggle funciona para Drinks', async () => {
+    const { history } = renderWithRouter(
+      <App />,
+    );
+
+    act(() => {
+      history.push('/drinks');
+    });
+
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    const cocktailButton = await screen.findByTestId(cocktailButtonId);
+    userEvent.click(cocktailButton);
+
+    const teste = await screen.findByRole('heading', { name: /155 belmont/i });
+    expect(teste).toBeVisible();
+
+    userEvent.click(cocktailButton);
+
+    const cocktail = await screen.findByRole('heading', { name: /gg/i });
+    expect(cocktail).toBeVisible();
+  });
+
+  it('Verifica se o toggle funciona para Meals', async () => {
+    const { history } = renderWithRouter(
+      <App />,
+    );
+
+    act(() => {
+      history.push('/meals');
+    });
+
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    const goatButton = await screen.findByTestId('Goat-category-filter');
+    userEvent.click(goatButton);
+
+    const goat = await screen.findByRole('heading', { name: /mbuzi choma \(roasted goat\)/i });
+    expect(goat).toBeVisible();
+
+    userEvent.click(goatButton);
+
+    const corba = await screen.findByRole('heading', { name: /corba/i });
+    expect(corba).toBeVisible();
   });
 });
