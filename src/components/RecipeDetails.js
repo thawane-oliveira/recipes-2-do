@@ -1,48 +1,62 @@
 import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useEffect, useContext } from 'react';
 import AppContext from '../context/AppContext';
 
-function RecipeDetails({ headerText }) {
+function RecipeDetails() {
   const history = useHistory();
   const {
     recipeDetail, setRecipeDetail, ingredients, setIngredients,
   } = useContext(AppContext);
-  const allIngredient = [];
-  const allMeasure = [];
+
+  //   const ingredientsAndMeasures = (detailRecipe) => {
+  //     let initialIngredient = 0;
+  //     let lastIngredient = 0;
+  //     let initialMeasure = 0;
+
+  //     if (history.location.pathname.includes('meals')) {
+  //       initialIngredient = Number('9');
+  //       lastIngredient = Number('28');
+  //       initialMeasure = Number('29');
+  //     }
+
+  //     if (history.location.pathname.includes('drinks')) {
+  //       initialIngredient = Number('21');
+  //       lastIngredient = Number('35');
+  //       initialMeasure = Number('36');
+  //     }
+
+  //     const all = Object.values(detailRecipe[0]);
+
+  //     for (let index = initialIngredient; index < lastIngredient; index += 1) {
+  //       if (all[index] !== null && all[index] !== '') {
+  //         allIngredient.push(all[index]);
+  //       }
+  //     }
+
+  //     const lastMeasure = initialMeasure + allIngredient.length;
+  //     for (let index2 = initialMeasure; index2 < lastMeasure; index2 += 1) {
+  //       const value = all[index2] || 'Add to taste';
+  //       allMeasure.push(value);
+  //     }
+  //     const allReqs = allIngredient.map((item, index) => `${item} - ${allMeasure[index]}`);
+  //     setIngredients(allReqs);
+  //   };
 
   const ingredientsAndMeasures = (detailRecipe) => {
-    let initialIngredient = 0;
-    let lastIngredient = 0;
-    let initialMeasure = 0;
+    const all = Object.entries(detailRecipe[0]);
+    const allIngredients = all
+      .filter((item) => item[0].includes('strIngredient'))
+      .filter((item) => (item[1] !== null && item[1] !== ''))
+      .map((item) => item[1]);
 
-    if (history.location.pathname.includes('meals')) {
-      initialIngredient = Number('9');
-      lastIngredient = Number('28');
-      initialMeasure = Number('29');
-    }
+    const allMeasures = all
+      .filter((item) => item[0].includes('strMeasure'))
+      .filter((item) => (item[1] !== null && item[1] !== ''))
+      .map((item) => item[1]);
 
-    if (history.location.pathname.includes('drinks')) {
-      initialIngredient = Number('21');
-      lastIngredient = Number('35');
-      initialMeasure = Number('36');
-    }
-
-    const all = Object.values(detailRecipe[0]);
-
-    for (let index = initialIngredient; index < lastIngredient; index += 1) {
-      if (all[index] !== null && all[index] !== '') {
-        allIngredient.push(all[index]);
-      }
-    }
-
-    const lastMeasure = initialMeasure + allIngredient.length;
-    for (let index2 = initialMeasure; index2 < lastMeasure; index2 += 1) {
-      const value = all[index2] || 'Add to taste';
-      allMeasure.push(value);
-    }
-    const allReqs = allIngredient.map((item, index) => `${item} - ${allMeasure[index]}`);
-    setIngredients(allReqs);
+    const itens = allIngredients.map((item, index) => `${item} - ${allMeasures[index]}`);
+    setIngredients(itens);
+    // função acima feita depois de auxílio do Sumo na mentoria de 01/12, para a lógica de como pegar chaves e valores dos ingredientes/medidas
   };
 
   useEffect(() => {
@@ -50,13 +64,13 @@ function RecipeDetails({ headerText }) {
     const splitedId = recipeId.split('/')[2];
 
     const verifyPath = async () => {
-      if (headerText === 'Meals') {
+      if (recipeId.includes('meals')) {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
         setRecipeDetail(data.meals);
         ingredientsAndMeasures(data.meals);
       }
-      if (headerText === 'Drinks') {
+      if (recipeId.includes('drinks')) {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
         setRecipeDetail(data.drinks);
@@ -73,7 +87,11 @@ function RecipeDetails({ headerText }) {
         <div key={ item.strMeal || item.strDrink }>
           <h3 data-testid="recipe-title">{item.strMeal || item.strDrink}</h3>
           <h4 data-testid="recipe-category">
-            {item.strAlcoholic ? `${item.strCategory} - ${item.strAlcoholic}` : item.strCategory}
+            {
+              item.strAlcoholic
+                ? `${item.strCategory} - ${item.strAlcoholic}`
+                : item.strCategory
+            }
           </h4>
           <img
             src={ item.strMealThumb || item.strDrinkThumb }
@@ -92,7 +110,7 @@ function RecipeDetails({ headerText }) {
           </ul>
           <p data-testid="instructions">{item.strInstructions}</p>
           {
-            headerText === 'Meals' && (
+            history.location.pathname.includes('meals') && (
               <iframe
                 data-testid="video"
                 title={ item.strMeal }
@@ -107,9 +125,5 @@ function RecipeDetails({ headerText }) {
     </>
   );
 }
-
-RecipeDetails.propTypes = {
-  headerText: PropTypes.string.isRequired,
-};
 
 export default RecipeDetails;
