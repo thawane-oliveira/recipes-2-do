@@ -22,6 +22,8 @@ function AppProvider({ children }) {
   const [initialRecipes, setInitialRecipes] = useState([]);
   const [isCategory, setIsCategory] = useState(false);
   const [verifyCategory, setVerifyCategory] = useState('');
+  const [recipeDetail, setRecipeDetail] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -95,6 +97,10 @@ function AppProvider({ children }) {
     setIsCategory,
     verifyCategory,
     setVerifyCategory,
+    recipeDetail,
+    setRecipeDetail,
+    ingredients,
+    setIngredients,
     loading,
     setLoading,
   }), [
@@ -117,6 +123,10 @@ function AppProvider({ children }) {
     setIsCategory,
     verifyCategory,
     setVerifyCategory,
+    recipeDetail,
+    setRecipeDetail,
+    ingredients,
+    setIngredients,
     loading,
     setLoading,
   ]);

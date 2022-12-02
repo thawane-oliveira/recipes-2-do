@@ -12,7 +12,7 @@ function Drinks() {
   return (
     <div>
       <Header headerText="Drinks" enableSearchButton />
-      <Recipes headerText="Drinks" />
+      <Recipes headerText="Drinks" url="/drinks" />
 
       {/* {
         recipes.filter((_item, index) => index < magicNumber)
