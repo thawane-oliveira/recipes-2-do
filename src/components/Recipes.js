@@ -74,7 +74,7 @@ function Recipes({ headerText }) {
         const mealDataArray = categoryMealData.meals.map((item) => item.strCategory);
         setCategories(mealDataArray);
         setLoading(false);
-      } else if (headerText === 'Drinks') {
+      } if (headerText === 'Drinks') {
         const drinkResponse = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
         const drinkData = await drinkResponse.json();
         setRecipes(drinkData.drinks);

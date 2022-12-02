@@ -5,7 +5,12 @@ import AppContext from '../context/AppContext';
 function RecipeDetails() {
   const history = useHistory();
   const {
-    recipeDetail, setRecipeDetail, ingredients, setIngredients,
+    recipeDetail,
+    setRecipeDetail,
+    ingredients,
+    setIngredients,
+    // recommend,
+    setRecommend,
   } = useContext(AppContext);
 
   //   const ingredientsAndMeasures = (detailRecipe) => {
@@ -69,12 +74,20 @@ function RecipeDetails() {
         const data = await response.json();
         setRecipeDetail(data.meals);
         ingredientsAndMeasures(data.meals);
+
+        const response2 = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+        const data2 = await response2.json();
+        setRecommend(data2.drinks);
       }
       if (recipeId.includes('drinks')) {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
         setRecipeDetail(data.drinks);
         ingredientsAndMeasures(data.drinks);
+
+        const response2 = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+        const data2 = await response2.json();
+        setRecommend(data2.meals);
       }
     };
     verifyPath();
