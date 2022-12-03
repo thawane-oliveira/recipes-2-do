@@ -5,17 +5,20 @@ import MerryGoRound from './MerryGoRound';
 import './styles/style.css';
 import Loading from './Loading';
 import shareIcon from '../images/shareIcon.svg';
-// import profileIcon from '../images/whiteHeartIcon.svg';
-// import searchIcon from '../images/blackHeartIcon.svg';
+import whiteHeart from '../images/whiteHeartIcon.svg';
+import blackHeart from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
 function RecipeDetails() {
   const history = useHistory();
+  const local = history.location.pathname;
+  const splitedId = local.split('/')[2];
   const {
     recipeDetail, setRecipeDetail, ingredients, setIngredients,
     setRecommend, setLoading, loading,
-    progress, setProgress, setCompleted, copied, setCopied,
+    progress, setProgress, copied, setCopied,
+    favorite, setFavorite,
   } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
@@ -36,9 +39,6 @@ function RecipeDetails() {
   };
 
   const verifyProgress = () => {
-    const local = history.location.pathname;
-    const splitedId = local.split('/')[2];
-
     const recoverInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'))
     || {
       drinks: {
@@ -80,18 +80,15 @@ function RecipeDetails() {
     }
   };
 
-  const verifyIfIsDone = () => {
-    const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
-    || { kakyoin: { } };
-    if (recoverDone === true) {
-      setCompleted(true);
-    } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
-  };
+  // const verifyIfIsDone = () => {
+  //   const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
+  //   || { kakyoin: { } };
+  //   if (recoverDone === true) {
+  //     setCompleted(true);
+  //   } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
+  // };
 
   const redirectRecipe = () => {
-    const local = history.location.pathname;
-    const splitedId = local.split('/')[2];
-
     if (local.includes('meals')) {
       history.push(`/meals/${splitedId}/in-progress`);
     }
@@ -101,19 +98,52 @@ function RecipeDetails() {
   };
 
   const copyRecipePath = () => {
-    const local = history.location.pathname;
     const copiedUrl = `http://localhost:3000${local}`;
     copy(copiedUrl);
     setCopied(true);
   };
 
+  const verifyIfIsFavorite = () => {
+    const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    // http://cangaceirojavascript.com.br/array-includes-vs-array-some/
+    const verifying = recoverFav.some((item) => item.id === splitedId);
+
+    if (verifying) {
+      setFavorite(true);
+    } else { setFavorite(false); }
+  };
+
+  const saveFavoriteRecipe = (localFavRec) => {
+    const objFavRecipe = {
+      id: recipeDetail[0].idMeal || recipeDetail[0].idDrink,
+      type: local.includes('meals') ? 'meal' : 'drink',
+      nationality: recipeDetail[0].strArea || '',
+      category: recipeDetail[0].strCategory,
+      alcoholicOrNot: recipeDetail[0].strAlcoholic || '',
+      name: recipeDetail[0].strDrink || recipeDetail[0].strMeal,
+      image: recipeDetail[0].strDrinkThumb || recipeDetail[0].strMealThumb };
+    const newFavRecipe = [...localFavRec, objFavRecipe];
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavRecipe));
+  };
+
+  const removeFromFavorite = (localFavRec) => {
+    const verifying = localFavRec.map((it) => it.id !== splitedId);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(verifying));
+  };
+
+  const fillOrEmptyHeart = () => {
+    const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || []; // array vazio para não quebrar
+    if (favorite === true) {
+      removeFromFavorite(recoverFav);
+    } else { saveFavoriteRecipe(recoverFav); }
+    verifyIfIsFavorite();
+  };
+
   useEffect(() => {
-    const recipeId = history.location.pathname;
-    const splitedId = recipeId.split('/')[2];
     const maxRecommendation = 6;
 
     const verifyPath = async () => {
-      if (recipeId.includes('meals')) {
+      if (local.includes('meals')) {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
         setRecipeDetail(data.meals);
@@ -124,7 +154,7 @@ function RecipeDetails() {
         setRecommend(data2.drinks.slice(0, maxRecommendation));
         setLoading(false);
       }
-      if (recipeId.includes('drinks')) {
+      if (local.includes('drinks')) {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
         setRecipeDetail(data.drinks);
@@ -138,7 +168,8 @@ function RecipeDetails() {
     };
     verifyPath();
     verifyProgress();
-    verifyIfIsDone();
+    // verifyIfIsDone();
+    verifyIfIsFavorite();
   }, []);
 
   return (
@@ -154,7 +185,6 @@ function RecipeDetails() {
                   : item.strCategory
               }
             </h4>
-            <button type="button">profileIcon</button>
             <img
               src={ item.strMealThumb || item.strDrinkThumb }
               data-testid="recipe-photo"
@@ -185,17 +215,15 @@ function RecipeDetails() {
             {loading ? <Loading /> : (<MerryGoRound />)}
           </div>
         )))}
-      <div>
-        <button
-          type="button"
-          data-testid="start-recipe-btn"
-          className="start-recipe-btn"
-          onClick={ redirectRecipe }
-        >
-          {progress ? 'Continue Recipe' : 'Start Recipe'}
-        </button>
-      </div>
-      <div>
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        className="start-recipe-btn"
+        onClick={ redirectRecipe }
+      >
+        {progress ? 'Continue Recipe' : 'Start Recipe'}
+      </button>
+      <div className="button-container">
         { copied ? <p>Link copied! </p> : (
           <button
             data-testid="share-btn"
@@ -205,13 +233,13 @@ function RecipeDetails() {
             <img src={ shareIcon } alt="share icon" />
           </button>
         )}
-      </div>
-      <div>
         <button
-          type="button"
           data-testid="favorite-btn"
+          onClick={ fillOrEmptyHeart }
+          src={ favorite ? blackHeart : whiteHeart }
+          type="button"
         >
-          Favorite Recipe
+          <img src={ favorite ? blackHeart : whiteHeart } alt="heart icon" />
         </button>
       </div>
     </>

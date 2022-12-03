@@ -29,6 +29,7 @@ function AppProvider({ children }) {
   const [progress, setProgress] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   useEffect(() => {
     const minLength = 6;
@@ -115,6 +116,8 @@ function AppProvider({ children }) {
     setCompleted,
     copied,
     setCopied,
+    favorite,
+    setFavorite,
   }), [
     email,
     isDisabled,
@@ -149,6 +152,8 @@ function AppProvider({ children }) {
     setCompleted,
     copied,
     setCopied,
+    favorite,
+    setFavorite,
   ]);
 
   return (
