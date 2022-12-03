@@ -28,6 +28,7 @@ function AppProvider({ children }) {
   const [recommend, setRecommend] = useState([]);
   const [progress, setProgress] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const minLength = 6;
@@ -112,6 +113,8 @@ function AppProvider({ children }) {
     setProgress,
     completed,
     setCompleted,
+    copied,
+    setCopied,
   }), [
     email,
     isDisabled,
@@ -144,6 +147,8 @@ function AppProvider({ children }) {
     setProgress,
     completed,
     setCompleted,
+    copied,
+    setCopied,
   ]);
 
   return (

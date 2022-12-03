@@ -4,16 +4,19 @@ import AppContext from '../context/AppContext';
 import MerryGoRound from './MerryGoRound';
 import './styles/style.css';
 import Loading from './Loading';
+import shareIcon from '../images/shareIcon.svg';
 // import profileIcon from '../images/whiteHeartIcon.svg';
 // import searchIcon from '../images/blackHeartIcon.svg';
+
+const copy = require('clipboard-copy');
 
 function RecipeDetails() {
   const history = useHistory();
   const {
     recipeDetail, setRecipeDetail, ingredients, setIngredients,
     setRecommend, setLoading, loading,
-    progress,
-    setProgress } = useContext(AppContext);
+    progress, setProgress, setCompleted, copied, setCopied,
+  } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
     const all = Object.entries(detailRecipe[0]);
@@ -36,7 +39,7 @@ function RecipeDetails() {
     const local = history.location.pathname;
     const splitedId = local.split('/')[2];
 
-    const recoverl = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    const recoverInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'))
     || {
       drinks: {
       },
@@ -45,7 +48,7 @@ function RecipeDetails() {
     };
 
     if (local.includes('meals')) {
-      const verifying = Object.keys(recoverl.meals).includes(splitedId);
+      const verifying = Object.keys(recoverInProgress.meals).includes(splitedId);
       setProgress(verifying);
 
       // const saveMeal = {
@@ -60,7 +63,7 @@ function RecipeDetails() {
       // localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
     }
     if (local.includes('drinks')) {
-      const verifying = Object.keys(recoverl.drinks).includes(splitedId);
+      const verifying = Object.keys(recoverInProgress.drinks).includes(splitedId);
       setProgress(verifying);
 
       // const saveDrink = {
@@ -77,6 +80,14 @@ function RecipeDetails() {
     }
   };
 
+  const verifyIfIsDone = () => {
+    const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || { kakyoin: { } };
+    if (recoverDone === true) {
+      setCompleted(true);
+    } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
+  };
+
   const redirectRecipe = () => {
     const local = history.location.pathname;
     const splitedId = local.split('/')[2];
@@ -87,6 +98,13 @@ function RecipeDetails() {
     if (local.includes('drinks')) {
       history.push(`/drinks/${splitedId}/in-progress`);
     }
+  };
+
+  const copyRecipePath = () => {
+    const local = history.location.pathname;
+    const copiedUrl = `http://localhost:3000${local}`;
+    copy(copiedUrl);
+    setCopied(true);
   };
 
   useEffect(() => {
@@ -120,6 +138,7 @@ function RecipeDetails() {
     };
     verifyPath();
     verifyProgress();
+    verifyIfIsDone();
   }, []);
 
   return (
@@ -177,12 +196,15 @@ function RecipeDetails() {
         </button>
       </div>
       <div>
-        <button
-          type="button"
-          data-testid="share-btn"
-        >
-          Share Recipe
-        </button>
+        { copied ? <p>Link copied! </p> : (
+          <button
+            data-testid="share-btn"
+            onClick={ copyRecipePath }
+            type="button"
+          >
+            <img src={ shareIcon } alt="share icon" />
+          </button>
+        )}
       </div>
       <div>
         <button
