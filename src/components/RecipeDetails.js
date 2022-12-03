@@ -4,52 +4,16 @@ import AppContext from '../context/AppContext';
 import MerryGoRound from './MerryGoRound';
 import './styles/style.css';
 import Loading from './Loading';
+// import profileIcon from '../images/whiteHeartIcon.svg';
+// import searchIcon from '../images/blackHeartIcon.svg';
 
 function RecipeDetails() {
   const history = useHistory();
   const {
-    recipeDetail,
-    setRecipeDetail,
-    ingredients,
-    setIngredients,
-    setRecommend,
-    setLoading,
-    loading,
-  } = useContext(AppContext);
-
-  //   const ingredientsAndMeasures = (detailRecipe) => {
-  //     let initialIngredient = 0;
-  //     let lastIngredient = 0;
-  //     let initialMeasure = 0;
-
-  //     if (history.location.pathname.includes('meals')) {
-  //       initialIngredient = Number('9');
-  //       lastIngredient = Number('28');
-  //       initialMeasure = Number('29');
-  //     }
-
-  //     if (history.location.pathname.includes('drinks')) {
-  //       initialIngredient = Number('21');
-  //       lastIngredient = Number('35');
-  //       initialMeasure = Number('36');
-  //     }
-
-  //     const all = Object.values(detailRecipe[0]);
-
-  //     for (let index = initialIngredient; index < lastIngredient; index += 1) {
-  //       if (all[index] !== null && all[index] !== '') {
-  //         allIngredient.push(all[index]);
-  //       }
-  //     }
-
-  //     const lastMeasure = initialMeasure + allIngredient.length;
-  //     for (let index2 = initialMeasure; index2 < lastMeasure; index2 += 1) {
-  //       const value = all[index2] || 'Add to taste';
-  //       allMeasure.push(value);
-  //     }
-  //     const allReqs = allIngredient.map((item, index) => `${item} - ${allMeasure[index]}`);
-  //     setIngredients(allReqs);
-  //   };
+    recipeDetail, setRecipeDetail, ingredients, setIngredients,
+    setRecommend, setLoading, loading,
+    progress,
+    setProgress } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
     const all = Object.entries(detailRecipe[0]);
@@ -68,14 +32,59 @@ function RecipeDetails() {
     // função acima feita depois de auxílio do Sumo na mentoria de 01/12, para a lógica de como pegar chaves e valores dos ingredientes/medidas
   };
 
-  const redirectToProgress = () => {
-    const recipeId = history.location.pathname;
-    const splitedId = recipeId.split('/')[2];
+  const verifyProgress = () => {
+    const local = history.location.pathname;
+    const splitedId = local.split('/')[2];
 
-    if (recipeId.includes('meals')) {
+    const recoverl = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || {
+      drinks: {
+      },
+      meals: {
+      }, // deixando um objeto vazio por enquanto porque ainda não chegamos no requisito 40;
+    };
+
+    if (local.includes('meals')) {
+      const verifying = Object.keys(recoverl.meals).includes(splitedId);
+      setProgress(verifying);
+
+      // const saveMeal = {
+      //   drinks: {
+      //     ...takeLocalRecipes.drinks,
+      //   },
+      //   meals: { ...takeLocalRecipes.meals,
+      //     [splitedId]: ingredients,
+      //   },
+      // };
+
+      // localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
+    }
+    if (local.includes('drinks')) {
+      const verifying = Object.keys(recoverl.drinks).includes(splitedId);
+      setProgress(verifying);
+
+      // const saveDrink = {
+      //   drinks: {
+      //     ...takeLocalRecipes.drinks,
+      //     [splitedId]: ingredients,
+      //   },
+      //   meals: {
+      //     ...takeLocalRecipes.meals,
+      //   },
+      // };
+
+      // localStorage.setItem('inProgressRecipes', JSON.stringify(saveDrink));
+    }
+  };
+
+  const redirectRecipe = () => {
+    const local = history.location.pathname;
+    const splitedId = local.split('/')[2];
+
+    if (local.includes('meals')) {
       history.push(`/meals/${splitedId}/in-progress`);
     }
-    if (recipeId.includes('drinks')) {
+    if (local.includes('drinks')) {
       history.push(`/drinks/${splitedId}/in-progress`);
     }
   };
@@ -110,11 +119,11 @@ function RecipeDetails() {
       }
     };
     verifyPath();
+    verifyProgress();
   }, []);
 
   return (
     <>
-
       {loading ? <Loading /> : (
         recipeDetail.map((item) => (
           <div key={ item.strMeal || item.strDrink }>
@@ -126,18 +135,19 @@ function RecipeDetails() {
                   : item.strCategory
               }
             </h4>
+            <button type="button">profileIcon</button>
             <img
               src={ item.strMealThumb || item.strDrinkThumb }
               data-testid="recipe-photo"
               alt={ item.strMealThumb || item.strDrinkThumb }
             />
             <ul>
-              {ingredients.map((el, index) => (
+              {ingredients.map((e, index) => (
                 <li
                   data-testid={ `${index}-ingredient-name-and-measure` }
                   key={ Math.random() }
                 >
-                  {el}
+                  {e}
                 </li>
               ))}
             </ul>
@@ -161,16 +171,20 @@ function RecipeDetails() {
           type="button"
           data-testid="start-recipe-btn"
           className="start-recipe-btn"
-          onClick={ redirectToProgress }
+          onClick={ redirectRecipe }
         >
-          Start Recipe
+          {progress ? 'Continue Recipe' : 'Start Recipe'}
         </button>
+      </div>
+      <div>
         <button
           type="button"
           data-testid="share-btn"
         >
           Share Recipe
         </button>
+      </div>
+      <div>
         <button
           type="button"
           data-testid="favorite-btn"

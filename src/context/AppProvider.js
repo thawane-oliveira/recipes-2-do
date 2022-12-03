@@ -26,6 +26,8 @@ function AppProvider({ children }) {
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [recommend, setRecommend] = useState([]);
+  const [progress, setProgress] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
     const minLength = 6;
@@ -106,6 +108,10 @@ function AppProvider({ children }) {
     setLoading,
     recommend,
     setRecommend,
+    progress,
+    setProgress,
+    completed,
+    setCompleted,
   }), [
     email,
     isDisabled,
@@ -134,6 +140,10 @@ function AppProvider({ children }) {
     setLoading,
     recommend,
     setRecommend,
+    progress,
+    setProgress,
+    completed,
+    setCompleted,
   ]);
 
   return (
