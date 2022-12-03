@@ -40,10 +40,12 @@ describe('Testes do SearchBar', () => {
     userEvent.click(filterSearchButton);
   });
 
-  it('Verifica se ao digitar mais de uma letra na bsuca por first letter é exibido um aviso/alert', async () => {
+  it('Verifica se ao digitar mais de uma letra na busca por first letter é exibido um aviso/alert', async () => {
     renderWithRouter(
       <App />,
     );
+    window.alert = () => {};
+
     const emailInput = screen.getByTestId('email-input');
     const passwordInput = screen.getByTestId('password-input');
     const loginButton = screen.getByTestId('login-submit-btn');
@@ -96,6 +98,8 @@ describe('Testes do SearchBar', () => {
     const { history } = renderWithRouter(
       <App />,
     );
+
+    window.alert = () => {};
 
     act(() => {
       history.push('/meals');

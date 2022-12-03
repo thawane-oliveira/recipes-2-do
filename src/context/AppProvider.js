@@ -66,11 +66,11 @@ function AppProvider({ children }) {
         global.alert('Your search must have only 1 (one) character');
         return;
       }
-      if (path === '/drinks') {
+      if (path.includes('/drinks')) {
         const fetch = await requestCocktail(searchText, typeOfSearch);
         fetchAnswer(fetch, 'drinks', 'idDrink');
       }
-      if (path === '/meals') {
+      if (path.includes('/meals')) {
         const fetch = await requestMeal(searchText, typeOfSearch);
         fetchAnswer(fetch, 'meals', 'idMeal');
       }

@@ -102,7 +102,7 @@ describe('Testes do componente Recipes', () => {
     userEvent.click(shakeButton);
     userEvent.click(otherButton);
     userEvent.click(cocoaButton);
-  }, 100000);
+  });
 
   it('Verifica se há um botão para resetar todos os filtros', async () => {
     const { history } = renderWithRouter(
@@ -219,5 +219,39 @@ describe('Testes do componente Recipes', () => {
 
     const corba = await screen.findByRole('heading', { name: /corba/i });
     expect(corba).toBeVisible();
+  });
+
+  it('Verifica se ao clicar numa receita, o usuário é redirecionado para a tela de detalhes', async () => {
+    const { history } = renderWithRouter(
+      <App />,
+    );
+
+    act(() => {
+      history.push('/meals');
+    });
+
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    const x = await screen.findByTestId('1-recipe-card');
+    userEvent.click(x);
+  });
+
+  it('Verifica se ao clicar numa receita, o usuário é redirecionado para a tela de detalhes', async () => {
+    const { history } = renderWithRouter(
+      <App />,
+    );
+
+    act(() => {
+      history.push('/drinks');
+    });
+
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    const x = await screen.findByTestId('1-recipe-card');
+    userEvent.click(x);
   });
 });

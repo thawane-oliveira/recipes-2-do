@@ -3,6 +3,8 @@ import { screen, cleanup, act, waitForElementToBeRemoved, waitFor } from '@testi
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../services/renderWithRouter';
+import { mockDrinkById, mockDrinksRecomendations } from './mockDrinks';
+import { mockMealById, mockMealsRecomendations } from './mockMeals';
 // import mockMeals from './mockMeals';
 // import mockMealsCategory from './mockMealsCategory';
 
@@ -11,69 +13,83 @@ afterEach(() => {
   cleanup();
 });
 
+const meals52997 = '/meals/52977';
+
 describe('Testes do componente Recipes', () => {
   it('Testa se ao entrar na rota /meals, é possível entrar na tela de detalhes de uma receita', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockMealById) },
+    );
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockMealsRecomendations) },
+    );
+
     const { history } = renderWithRouter(
       <App />,
     );
 
     act(() => {
-      history.push('/meals');
+      history.push(meals52997);
     });
-
-    const drinkTitle = screen.getByRole('heading', { name: /meals/i });
-    expect(drinkTitle).toBeVisible();
 
     const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
     expect(loading[0]).toBeVisible();
     await waitForElementToBeRemoved(loading[0]);
 
-    const ggRecipeDiv = await screen.findByTestId('0-recipe-card');
-    userEvent.click(ggRecipeDiv);
-
-    // await waitForElementToBeRemoved(loading);
-    await waitFor(() => {
-      const firstCarousel = screen.getByTestId('0-recommendation-card');
-      expect(firstCarousel).toBeVisible();
-    });
+    const firstCarousel = await screen.findByTestId('1-recommendation-card');
+    expect(firstCarousel).toBeVisible();
 
     const startBtn = screen.getByTestId('start-recipe-btn');
     userEvent.click(startBtn);
+
+    expect(history.location.pathname).toBe('/meals/52977/in-progress');
   });
 
   it('Testa se ao entrar na rota /drinks, é possível entrar na tela de detalhes de uma receita', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockDrinkById) },
+    );
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockDrinksRecomendations) },
+    );
+
     const { history } = renderWithRouter(
       <App />,
     );
 
     act(() => {
-      history.push('/drinks');
+      history.push('drinks/15977');
     });
-
-    const drinkTitle = screen.getByRole('heading', { name: /drinks/i });
-    expect(drinkTitle).toBeVisible();
 
     const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
     expect(loading[0]).toBeVisible();
     await waitForElementToBeRemoved(loading[0]);
 
-    const ggRecipeDiv = await screen.findByTestId('0-recipe-card');
-    userEvent.click(ggRecipeDiv);
-
-    // await waitForElementToBeRemoved(loading);
     await waitFor(() => {
-      const firstCarousel = screen.getByTestId('0-recommendation-card');
+      const firstCarousel = screen.getByTestId('2-recommendation-card');
       expect(firstCarousel).toBeVisible();
     });
 
     const startBtn = screen.getByTestId('start-recipe-btn');
     userEvent.click(startBtn);
+
+    expect(history.location.pathname).toBe('/drinks/15977/in-progress');
   });
 
   it('Testa se há um botão de copiar/compartilhar receita', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockMealById) },
+    );
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockMealsRecomendations) },
+    );
+
     Object.defineProperty(navigator, 'clipboard', {
       value: {
-        writeText: () => {},
+        writeText: () => { },
       },
     }); // https://stackoverflow.com/questions/62351935/how-to-mock-navigator-clipboard-writetext-in-jest
 
@@ -93,31 +109,71 @@ describe('Testes do componente Recipes', () => {
     expect(copyText).toBeVisible();
   });
 
-  it('Testa se há um botão de favoritar receita', async () => {
+  it('Testa se há um botão de favoritar receita, favoritando e desfavoritando um item na rota drinks', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockDrinkById) },
+    );
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockDrinksRecomendations) },
+    );
+
     const { history } = renderWithRouter(
       <App />,
     );
 
     act(() => {
-      history.push('/meals/52977');
+      history.push('/drinks/15997');
     });
+
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    // await waitFor(() => {
+    const firstCarousel = await screen.findByTestId('0-recommendation-card');
+    expect(firstCarousel).toBeVisible();
+    // });
+
+    const favoriteBtn = screen.getByTestId('favorite-btn');
+
+    userEvent.click(favoriteBtn);
+    expect(favoriteBtn).toHaveAttribute('src', 'blackHeartIcon.svg');
+
+    userEvent.click(favoriteBtn);
+  });
+
+  it('Testa se há um botão de favoritar receita, favoritando e desfavoritando um item na rota meals', async () => {
+    jest.spyOn(global, 'fetch');
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockMealById) },
+    );
+    global.fetch.mockResolvedValueOnce(
+      { json: jest.fn().mockResolvedValue(mockMealsRecomendations) },
+    );
+
+    const { history } = renderWithRouter(
+      <App />,
+    );
+
+    act(() => {
+      history.push(meals52997);
+    });
+
+    const loading = screen.getAllByRole('heading', { name: /loading.../i, level: 1 });
+    expect(loading[0]).toBeVisible();
+    await waitForElementToBeRemoved(loading[0]);
+
+    const firstCarousel = await screen.findByTestId('0-recommendation-card');
+    expect(firstCarousel).toBeVisible();
 
     const favoriteBtn = screen.getByTestId('favorite-btn');
     expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
 
-    // const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+    userEvent.click(favoriteBtn);
+    expect(favoriteBtn).toHaveAttribute('src', 'blackHeartIcon.svg');
 
-    // const bigMacArr = { id: '53013', type: 'meal', nationality: 'American', category: 'Beef', alcoholicOrNot: '', name: 'Big Mac', image: 'https://www.themealdb.com/images/media/meals/urzj1d1587670726.jpg' };
-
-    // const newFavRecipe = [...recoverFav, bigMacArr];
-    // localStorage.setItem('favoriteRecipes', JSON.stringify(newFavRecipe));
-
-    // JSON.parse(localStorage.getItem('favoriteRecipes'));
-
-    // // expect(fav).toHaveLength(1);
-
-    // userEvent.click(favoriteBtn);
-
-    expect(favoriteBtn).toBeVisible();
+    userEvent.click(favoriteBtn);
+    expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
   });
 });
