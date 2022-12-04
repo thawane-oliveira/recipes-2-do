@@ -221,7 +221,7 @@ describe('Testes do componente Recipes', () => {
     expect(corba).toBeVisible();
   });
 
-  it('Verifica se ao clicar numa receita, o usuário é redirecionado para a tela de detalhes', async () => {
+  it('Verifica se ao clicar numa receita de meals, o usuário é redirecionado para a tela de detalhes', async () => {
     const { history } = renderWithRouter(
       <App />,
     );
@@ -238,7 +238,7 @@ describe('Testes do componente Recipes', () => {
     userEvent.click(x);
   });
 
-  it('Verifica se ao clicar numa receita, o usuário é redirecionado para a tela de detalhes', async () => {
+  it('Verifica se ao clicar numa receita de drinks, o usuário é redirecionado para a tela de detalhes', async () => {
     const { history } = renderWithRouter(
       <App />,
     );

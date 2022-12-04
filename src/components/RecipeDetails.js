@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom';
 import { useEffect, useContext } from 'react';
 import AppContext from '../context/AppContext';
-import MerryGoRound from './MerryGoRound';
+import CardDetails from './CardDetails';
 import './styles/style.css';
 import Loading from './Loading';
 import shareIcon from '../images/shareIcon.svg';
@@ -15,10 +15,10 @@ function RecipeDetails() {
   const local = history.location.pathname;
   const splitedId = local.split('/')[2];
   const {
-    recipeDetail, setRecipeDetail, ingredients, setIngredients,
+    recipeDetail, setRecipeDetail, setIngredients,
     setRecommend, setLoading, loading,
     progress, setProgress, copied, setCopied,
-    favorite, setFavorite,
+    favorite, setFavorite, ingredients,
   } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
@@ -177,44 +177,28 @@ function RecipeDetails() {
     <>
       {loading ? <Loading /> : (
         recipeDetail.map((item) => (
-          <div key={ item.strMeal || item.strDrink }>
-            <h3 data-testid="recipe-title">{item.strMeal || item.strDrink}</h3>
-            <h4 data-testid="recipe-category">
-              {
-                item.strAlcoholic
-                  ? `${item.strCategory} - ${item.strAlcoholic}`
-                  : item.strCategory
-              }
-            </h4>
-            <img
-              src={ item.strMealThumb || item.strDrinkThumb }
-              data-testid="recipe-photo"
-              alt={ item.strMealThumb || item.strDrinkThumb }
-            />
-            <ul>
-              {ingredients.map((e, index) => (
-                <li
-                  data-testid={ `${index}-ingredient-name-and-measure` }
-                  key={ Math.random() }
-                >
-                  {e}
-                </li>
-              ))}
-            </ul>
-            <p data-testid="instructions">{item.strInstructions}</p>
-            {
-              history.location.pathname.includes('meals') && (
-                <iframe
-                  data-testid="video"
-                  title={ item.strMeal }
-                  width="420"
-                  height="315"
-                  src={ item.strYoutube?.replace('watch?v=', 'embed/') } // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
-                />
-              )
+          <CardDetails
+            key={ item.strMeal || item.strDrink }
+            title={ item.strMeal || item.strDrink }
+            category={
+              item.strAlcoholic
+                ? `${item.strCategory} - ${item.strAlcoholic}`
+                : item.strCategory
             }
-            <MerryGoRound />
-          </div>
+            photo={ item.strMealThumb || item.strDrinkThumb }
+            instructions={ item.strInstructions }
+            ing={ ingredients.map((it, index) => (
+              <li
+                data-testid={ `${index}-ingredient-name-and-measure` }
+                key={ Math.random() }
+              >
+                {it}
+              </li>
+            )) }
+            video={ history.location.pathname.includes('meals') && (
+              recipeDetail.map((i) => (i.strYoutube?.replace('watch?v=', 'embed/') // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
+              ))) }
+          />
         )))}
       <button
         type="button"
