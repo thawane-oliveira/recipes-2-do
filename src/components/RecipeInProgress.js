@@ -36,7 +36,7 @@ function RecipeInProgress() {
   };
 
   const copyRecipePath = () => {
-    const copiedUrl = `http://localhost:3000${local}`;
+    const copiedUrl = `http://localhost:3000${local.split('/in-')[0]}`;
     copy(copiedUrl);
     setCopied(true);
   };
@@ -73,6 +73,10 @@ function RecipeInProgress() {
       removeFromFavorite(recoverFav);
     } else { saveFavoriteRecipe(recoverFav); }
     verifyIfIsFavorite();
+  };
+
+  const redirectToDone = () => {
+    history.push('/done-recipes');
   };
 
   useEffect(() => {
@@ -119,17 +123,15 @@ function RecipeInProgress() {
             />
             { ingredients.map((it, index) => (
               <label
-                key={ Math.random() }
+                key={ it }
                 htmlFor={ it }
                 data-testid={ `${index}-ingredient-step` }
               >
-                <p>
-                  <input
-                    id={ it }
-                    type="checkbox"
-                  />
-                  {it}
-                </p>
+                <input
+                  name={ it }
+                  type="checkbox"
+                />
+                {it}
               </label>
             )) }
 
@@ -153,8 +155,9 @@ function RecipeInProgress() {
               <img src={ favorite ? blackHeart : whiteHeart } alt="heart icon" />
             </button>
             <button
-              type="button"
               data-testid="finish-recipe-btn"
+              onClick={ redirectToDone }
+              type="button"
             >
               Finish Recipe
             </button>
