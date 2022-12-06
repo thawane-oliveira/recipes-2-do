@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 import shareIcon from '../images/shareIcon.svg';
@@ -20,6 +20,8 @@ function RecipeInProgress() {
     loading, setLoading, setIngredients,
     tickedIngredient, setTickedIngredient,
   } = useContext(AppContext);
+
+  const [cboxIngredient, setCboxIngredient] = useState({});
 
   const ingredientsAndMeasures = (detailRecipe) => {
     const all = Object.entries(detailRecipe[0]);
@@ -114,7 +116,13 @@ function RecipeInProgress() {
     }
   };
 
-  const verifyIngredient = ({ target }) => {
+  const verifyIngredient = ({ target }, it) => {
+    const newObj = cboxIngredient;
+
+    console.log('antes', cboxIngredient, newObj);
+    newObj[it] = !newObj[it];
+    console.log('depois', newObj);
+    setCboxIngredient(newObj);
     // if (!tickedIngredient.includes(it)) {
     //   setTickedIngredient([...tickedIngredient, it]);
     // } else {
@@ -122,14 +130,15 @@ function RecipeInProgress() {
     //   setTickedIngredient(x);
     // }
 
-    if (target.checked) {
-      setTickedIngredient([...tickedIngredient, target.name]);
-      // target.parentNode.parentNode.classList.add('active');
-    } else {
-      const x = tickedIngredient.filter((i) => i !== target.name);
-      setTickedIngredient(x);
-      // target.parentNode.parentNode.classList.remove('active');
-    }
+    // if (target.checked) {
+    //   console.log(target.checked);
+    //   setTickedIngredient([...tickedIngredient, target.name]);
+    //   // target.parentNode.parentNode.classList.add('active');
+    // } else {
+    //   const x = tickedIngredient.filter((i) => i !== target.name);
+    //   setTickedIngredient(x);
+    //   // target.parentNode.parentNode.classList.remove('active');
+    // }
     verifyProgress();
   };
 
@@ -154,6 +163,13 @@ function RecipeInProgress() {
     };
     verifyPath();
     verifyIfIsFavorite();
+
+    const myObj = {};
+    ingredients.forEach((item) => {
+      myObj[item] = false;
+    });
+
+    setCboxIngredient(myObj);
   }, []);
 
   return (
@@ -170,24 +186,22 @@ function RecipeInProgress() {
             }
             photo={ item.strMealThumb || item.strDrinkThumb }
             ing={ ingredients.map((it, index) => (
-              <li
+              // <li
+              // >
+              <label
                 key={ it }
                 data-testid={ `${index}-ingredient-step` }
+                htmlFor={ it }
               >
-                <label
-                  htmlFor={ it }
-                >
-                  <input
-                    defaultChecked={ tickedIngredient.some((x) => (x === it)) }
-                    id={ it }
-                    name={ it }
-                    onClick={ (evt) => verifyIngredient(evt) }
-                    type="checkbox"
-                    value={ it }
-                  />
-                  {it}
-                </label>
-              </li>
+                <input
+                  id={ it }
+                  onChange={ (evt) => verifyIngredient(evt, it) }
+                  checked={ cboxIngredient[it] }
+                  type="checkbox"
+                />
+                {it}
+              </label>
+              // </li>
             )) }
             instructions={ item.strInstructions }
             shareBtn={ copied ? <p>Link copied! </p> : (

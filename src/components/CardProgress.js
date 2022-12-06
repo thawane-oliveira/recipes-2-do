@@ -14,9 +14,7 @@ function CardProgress({
         data-testid="recipe-photo"
         alt={ title }
       />
-      <ul>
-        {ing}
-      </ul>
+      {ing}
       <p data-testid="instructions">{instructions}</p>
       {shareBtn}
       {favBtn}
