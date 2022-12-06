@@ -116,29 +116,11 @@ function RecipeInProgress() {
     }
   };
 
-  const verifyIngredient = ({ target }, it) => {
+  const verifyIngredient = (it) => {
     const newObj = cboxIngredient;
 
-    console.log('antes', cboxIngredient, newObj);
     newObj[it] = !newObj[it];
-    console.log('depois', newObj);
     setCboxIngredient(newObj);
-    // if (!tickedIngredient.includes(it)) {
-    //   setTickedIngredient([...tickedIngredient, it]);
-    // } else {
-    //   const x = tickedIngredient.filter((i) => i !== it);
-    //   setTickedIngredient(x);
-    // }
-
-    // if (target.checked) {
-    //   console.log(target.checked);
-    //   setTickedIngredient([...tickedIngredient, target.name]);
-    //   // target.parentNode.parentNode.classList.add('active');
-    // } else {
-    //   const x = tickedIngredient.filter((i) => i !== target.name);
-    //   setTickedIngredient(x);
-    //   // target.parentNode.parentNode.classList.remove('active');
-    // }
     verifyProgress();
   };
 
@@ -186,8 +168,7 @@ function RecipeInProgress() {
             }
             photo={ item.strMealThumb || item.strDrinkThumb }
             ing={ ingredients.map((it, index) => (
-              // <li
-              // >
+
               <label
                 key={ it }
                 data-testid={ `${index}-ingredient-step` }
@@ -195,13 +176,13 @@ function RecipeInProgress() {
               >
                 <input
                   id={ it }
-                  onChange={ (evt) => verifyIngredient(evt, it) }
+                  onChange={ () => verifyIngredient(it) }
                   checked={ cboxIngredient[it] }
                   type="checkbox"
                 />
                 {it}
               </label>
-              // </li>
+
             )) }
             instructions={ item.strInstructions }
             shareBtn={ copied ? <p>Link copied! </p> : (
