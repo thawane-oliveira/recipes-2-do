@@ -6,6 +6,7 @@ import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import Loading from './Loading';
 import './styles/style.css';
+import CardProgress from './CardProgress';
 
 const copy = require('clipboard-copy');
 
@@ -17,6 +18,7 @@ function RecipeInProgress() {
   const { recipeDetail, setRecipeDetail, ingredients,
     copied, setCopied, favorite, setFavorite,
     loading, setLoading, setIngredients,
+    tickedIngredient, setTickedIngredient,
   } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
@@ -79,6 +81,58 @@ function RecipeInProgress() {
     history.push('/done-recipes');
   };
 
+  const verifyProgress = () => {
+    const recoverInProgress = JSON.parse(localStorage.getItem('inProgressRecipes')) || {
+      drinks: {
+      },
+      meals: {
+      },
+    };
+
+    if (local.includes('meals')) {
+      const saveMeal = {
+        drinks: {
+          ...recoverInProgress.drinks,
+        },
+        meals: { ...recoverInProgress.meals,
+          [splitedId]: tickedIngredient,
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
+    }
+    if (local.includes('drinks')) {
+      const saveDrink = {
+        drinks: {
+          ...recoverInProgress.drinks,
+          [splitedId]: tickedIngredient,
+        },
+        meals: {
+          ...recoverInProgress.meals,
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(saveDrink));
+    }
+  };
+
+  const verifyIngredient = ({ target }) => {
+    // if (!tickedIngredient.includes(it)) {
+    //   setTickedIngredient([...tickedIngredient, it]);
+    // } else {
+    //   const x = tickedIngredient.filter((i) => i !== it);
+    //   setTickedIngredient(x);
+    // }
+
+    if (target.checked) {
+      setTickedIngredient([...tickedIngredient, target.name]);
+      // target.parentNode.parentNode.classList.add('active');
+    } else {
+      const x = tickedIngredient.filter((i) => i !== target.name);
+      setTickedIngredient(x);
+      // target.parentNode.parentNode.classList.remove('active');
+    }
+    verifyProgress();
+  };
+
   useEffect(() => {
     const verifyPath = async () => {
       if (local.includes('meals')) {
@@ -104,40 +158,39 @@ function RecipeInProgress() {
 
   return (
     <main>
-      <p />
       { loading ? <Loading /> : (
         recipeDetail.map((item) => (
-          <div key={ Math.random() }>
-            <h3 data-testid="recipe-title">{ item.strMeal || item.strDrink }</h3>
-            <h4 data-testid="recipe-category">
-              {
-                item.strAlcoholic
-                  ? `${item.strCategory} - ${item.strAlcoholic}`
-                  : item.strCategory
-              }
-            </h4>
-            <img
-              src={ item.strMealThumb || item.strDrinkThumb }
-              data-testid="recipe-photo"
-              alt={ item.strMeal || item.strDrink }
-            />
-            { ingredients.map((it, index) => (
-              <label
+          <CardProgress
+            key={ Math.random() }
+            title={ item.strMeal || item.strDrink }
+            category={
+              item.strAlcoholic
+                ? `${item.strCategory} - ${item.strAlcoholic}`
+                : item.strCategory
+            }
+            photo={ item.strMealThumb || item.strDrinkThumb }
+            ing={ ingredients.map((it, index) => (
+              <li
                 key={ it }
-                htmlFor={ it }
                 data-testid={ `${index}-ingredient-step` }
               >
-                <input
-                  name={ it }
-                  type="checkbox"
-                />
-                {it}
-              </label>
+                <label
+                  htmlFor={ it }
+                >
+                  <input
+                    defaultChecked={ tickedIngredient.some((x) => (x === it)) }
+                    id={ it }
+                    name={ it }
+                    onClick={ (evt) => verifyIngredient(evt) }
+                    type="checkbox"
+                    value={ it }
+                  />
+                  {it}
+                </label>
+              </li>
             )) }
-
-            <p data-testid="instructions">{item.strInstructions}</p>
-
-            {copied ? <p>Link copied! </p> : (
+            instructions={ item.strInstructions }
+            shareBtn={ copied ? <p>Link copied! </p> : (
               <button
                 data-testid="share-btn"
                 onClick={ copyRecipePath }
@@ -145,24 +198,27 @@ function RecipeInProgress() {
               >
                 <img src={ shareIcon } alt="share icon" />
               </button>
-            )}
-            <button
-              data-testid="favorite-btn"
-              onClick={ fillOrEmptyHeart }
-              src={ favorite ? blackHeart : whiteHeart }
-              type="button"
-            >
-              <img src={ favorite ? blackHeart : whiteHeart } alt="heart icon" />
-            </button>
-            <button
-              data-testid="finish-recipe-btn"
-              onClick={ redirectToDone }
-              type="button"
-            >
-              Finish Recipe
-            </button>
-
-          </div>
+            ) }
+            favBtn={
+              <button
+                data-testid="favorite-btn"
+                onClick={ fillOrEmptyHeart }
+                src={ favorite ? blackHeart : whiteHeart }
+                type="button"
+              >
+                <img src={ favorite ? blackHeart : whiteHeart } alt="heart icon" />
+              </button>
+            }
+            finishBtn={
+              <button
+                data-testid="finish-recipe-btn"
+                onClick={ redirectToDone }
+                type="button"
+              >
+                Finish Recipe
+              </button>
+            }
+          />
         ))
       )}
     </main>

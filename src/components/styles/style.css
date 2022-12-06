@@ -13,6 +13,10 @@ footer {
   width: 100vw;
 }
 
+.active {
+  text-decoration: line-through solid black;
+}
+
 label:has( input:checked ) {
   text-decoration: line-through solid black;
 }

@@ -16,9 +16,9 @@ function RecipeDetails() {
   const splitedId = local.split('/')[2];
   const {
     recipeDetail, setRecipeDetail, setIngredients,
-    setRecommend, setLoading, loading,
+    setRecommend, setLoading, loading, setCompleted,
     progress, setProgress, copied, setCopied,
-    favorite, setFavorite, ingredients,
+    favorite, setFavorite, ingredients, tickedIngredient,
   } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
@@ -44,51 +44,54 @@ function RecipeDetails() {
         drinks: {
         },
         meals: {
-        }, // deixando um objeto vazio por enquanto porque ainda não chegamos no requisito 40;
+        },
       };
 
     if (local.includes('meals')) {
       const verifying = Object.keys(recoverInProgress.meals).includes(splitedId);
       setProgress(verifying);
 
-      // const saveMeal = {
-      //   drinks: {
-      //     ...takeLocalRecipes.drinks,
-      //   },
-      //   meals: { ...takeLocalRecipes.meals,
-      //     [splitedId]: ingredients,
-      //   },
-      // };
-      // const verify = recoverProgress.some(() => recoverProgress.meals.id === splitedId);
-      // setProgress(verify);
+      const saveMeal = {
+        drinks: {
+          ...recoverInProgress.drinks,
+        },
+        meals: { ...recoverInProgress.meals,
+          [splitedId]: tickedIngredient,
+        },
+      };
 
-      // localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
+      localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
+      // setProgress(true);
     }
     if (local.includes('drinks')) {
       const verifying = Object.keys(recoverInProgress.drinks).includes(splitedId);
       setProgress(verifying);
 
-      // const saveDrink = {
-      //   drinks: {
-      //     ...takeLocalRecipes.drinks,
-      //     [splitedId]: ingredients,
-      //   },
-      //   meals: {
-      //     ...takeLocalRecipes.meals,
-      //   },
-      // };
+      const saveDrink = {
+        drinks: {
+          ...recoverInProgress.drinks,
+          [splitedId]: tickedIngredient,
+        },
+        meals: { ...recoverInProgress.meals,
+        },
+      };
+
+      localStorage.setItem('inProgressRecipes', JSON.stringify(saveDrink));
+      // setProgress(true);
     }
   };
 
-  // const verifyIfIsDone = () => {
-  //   const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
-  //   || { kakyoin: { } };
-  //   if (recoverDone === true) {
-  //     setCompleted(true);
-  //   } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
-  // };
+  const verifyIfIsDone = () => {
+    const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || { };
+    if (recoverDone === true) {
+      setCompleted(true);
+    } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
+  };
 
   const redirectRecipe = () => {
+    verifyProgress();
+
     if (local.includes('meals')) {
       history.push(`/meals/${splitedId}/in-progress`);
     }
@@ -168,9 +171,9 @@ function RecipeDetails() {
       }
     };
     verifyPath();
-    verifyProgress();
-    // verifyIfIsDone();
+    verifyIfIsDone();
     verifyIfIsFavorite();
+    verifyProgress();
   }, []);
 
   return (

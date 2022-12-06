@@ -30,6 +30,8 @@ function AppProvider({ children }) {
   const [completed, setCompleted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [favorite, setFavorite] = useState(false);
+  const [ticked, setTicked] = useState(true);
+  const [tickedIngredient, setTickedIngredient] = useState([]);
 
   useEffect(() => {
     const minLength = 6;
@@ -118,6 +120,10 @@ function AppProvider({ children }) {
     setCopied,
     favorite,
     setFavorite,
+    tickedIngredient,
+    setTickedIngredient,
+    ticked,
+    setTicked,
   }), [
     email,
     isDisabled,
@@ -125,35 +131,22 @@ function AppProvider({ children }) {
     searchInput,
     radioOption,
     searchByFilter,
-    setSearchInput,
     recipes,
-    setRecipes,
     path,
-    setPath,
     categories,
-    setCategories,
     initialRecipes,
-    setInitialRecipes,
     isCategory,
-    setIsCategory,
     verifyCategory,
-    setVerifyCategory,
     recipeDetail,
-    setRecipeDetail,
     ingredients,
-    setIngredients,
     loading,
-    setLoading,
     recommend,
-    setRecommend,
     progress,
-    setProgress,
     completed,
-    setCompleted,
     copied,
-    setCopied,
     favorite,
-    setFavorite,
+    tickedIngredient,
+    ticked,
   ]);
 
   return (
