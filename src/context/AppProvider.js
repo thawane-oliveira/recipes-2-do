@@ -25,6 +25,13 @@ function AppProvider({ children }) {
   const [recipeDetail, setRecipeDetail] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [recommend, setRecommend] = useState([]);
+  const [progress, setProgress] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const [ticked, setTicked] = useState(true);
+  const [tickedIngredient, setTickedIngredient] = useState([]);
 
   useEffect(() => {
     const minLength = 6;
@@ -61,11 +68,11 @@ function AppProvider({ children }) {
         global.alert('Your search must have only 1 (one) character');
         return;
       }
-      if (path === '/drinks') {
+      if (path.includes('/drinks')) {
         const fetch = await requestCocktail(searchText, typeOfSearch);
         fetchAnswer(fetch, 'drinks', 'idDrink');
       }
-      if (path === '/meals') {
+      if (path.includes('/meals')) {
         const fetch = await requestMeal(searchText, typeOfSearch);
         fetchAnswer(fetch, 'meals', 'idMeal');
       }
@@ -103,6 +110,20 @@ function AppProvider({ children }) {
     setIngredients,
     loading,
     setLoading,
+    recommend,
+    setRecommend,
+    progress,
+    setProgress,
+    completed,
+    setCompleted,
+    copied,
+    setCopied,
+    favorite,
+    setFavorite,
+    tickedIngredient,
+    setTickedIngredient,
+    ticked,
+    setTicked,
   }), [
     email,
     isDisabled,
@@ -110,25 +131,22 @@ function AppProvider({ children }) {
     searchInput,
     radioOption,
     searchByFilter,
-    setSearchInput,
     recipes,
-    setRecipes,
     path,
-    setPath,
     categories,
-    setCategories,
     initialRecipes,
-    setInitialRecipes,
     isCategory,
-    setIsCategory,
     verifyCategory,
-    setVerifyCategory,
     recipeDetail,
-    setRecipeDetail,
     ingredients,
-    setIngredients,
     loading,
-    setLoading,
+    recommend,
+    progress,
+    completed,
+    copied,
+    favorite,
+    tickedIngredient,
+    ticked,
   ]);
 
   return (

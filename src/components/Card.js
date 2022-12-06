@@ -1,21 +1,20 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import RecipeDetails from './RecipeDetails';
 
-function Card({ index, photo, title, id, headerText }) {
+function Card({ index, photo, title, id }) {
+  const history = useHistory();
+  const local = history.location.pathname;
+
   const verifyId = () => {
-    if (headerText === 'Meals') {
-      <RecipeDetails id={ id } />;
-      return `/meals/${id}`;
-    }
-    if (headerText === 'Drinks') {
-      <RecipeDetails id={ id } />;
-      return `/drinks/${id}`;
-    }
+    <RecipeDetails id={ id } />;
+    if (local.includes('drinks')) return `/drinks/${id}`;
+    // if (local.includes('meals')) return `/meals/${id}`;
+    return `/meals/${id}`;
   };
 
   return (
-    <Link key={ index } to={ () => verifyId() }>
+    <Link key={ index } to={ verifyId() }>
       <div data-testid={ `${index}-recipe-card` }>
         <h3
           data-testid={ `${index}-card-name` }
@@ -37,7 +36,6 @@ Card.propTypes = {
   photo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
-  headerText: PropTypes.string.isRequired,
 };
 
 export default Card;
