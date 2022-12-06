@@ -3,9 +3,12 @@ import Header from '../components/Header';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
+const copyURL = require('clipboard-copy');
+
 function FavoriteRecipes() {
   const responseFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
   const [fav, setFav] = useState(responseFav);
+  const [isCopied, setIsCopied] = useState('');
 
   const filterMeals = () => {
     const filterMeal = responseFav.filter((e) => e.type === 'meal');
@@ -22,6 +25,16 @@ function FavoriteRecipes() {
   const filterAll = () => {
     setFav(responseFav);
     console.log(responseFav);
+  };
+
+  const handleShare = (type, id) => {
+    if (type === 'drink') {
+      copyURL(`http://localhost:3000/drinks/${id}`);
+      setIsCopied(id);
+    } if (type === 'meal') {
+      copyURL(`http://localhost:3000/meals/${id}`);
+      setIsCopied(id);
+    }
   };
 
   return (
@@ -76,15 +89,17 @@ function FavoriteRecipes() {
                   >
                     <img src={ blackHeartIcon } alt={ element.name } />
                   </button>
-
-                  <button
-                    type="button"
-                    data-testid={ `${index}-horizontal-share-btn` }
-                    onClick={ () => {} }
-                    src="shareIcon"
-                  >
-                    <img src={ shareIcon } alt={ element.name } />
-                  </button>
+                  {
+                    isCopied === element.id ? <p>Link copied!</p> : (
+                      <button
+                        type="button"
+                        data-testid={ `${index}-horizontal-share-btn` }
+                        onClick={ () => handleShare(element.type, element.id) }
+                        src="shareIcon"
+                      >
+                        <img src={ shareIcon } alt={ element.name } />
+                      </button>)
+                  }
 
                 </div>
               );
@@ -111,15 +126,18 @@ function FavoriteRecipes() {
                 >
                   <img src={ blackHeartIcon } alt={ element.name } />
                 </button>
+                {
+                  isCopied === element.id ? <p>Link copied!</p> : (
+                    <button
+                      type="button"
+                      data-testid={ `${index}-horizontal-share-btn` }
+                      onClick={ () => handleShare(element.type, element.id) }
+                      src="shareIcon"
+                    >
+                      <img src={ shareIcon } alt={ element.name } />
+                    </button>)
+                }
 
-                <button
-                  type="button"
-                  data-testid={ `${index}-horizontal-share-btn` }
-                  onClick={ () => {} }
-                  src="shareIcon"
-                >
-                  <img src={ shareIcon } alt={ element.name } />
-                </button>
               </div>
             );
           })
