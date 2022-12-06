@@ -112,6 +112,7 @@ function RecipeDetails() {
     const verifying = recoverFav.some((item) => item.id === splitedId);
 
     if (verifying) { setFavorite(true); } else { setFavorite(false); }
+    console.log(recoverFav);
   };
 
   const saveFavoriteRecipe = (localFavRec) => {
