@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 
 function FavoriteRecipes() {
   const responseFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
-  const [fav, setFav] = useState(responseFav);
+  // const [fav, setFav] = useState(responseFav);
 
   const filterMeals = () => {
     const filterMeal = responseFav.filter((e) => e.type === 'meal');

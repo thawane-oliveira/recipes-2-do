@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 import shareIcon from '../images/shareIcon.svg';
@@ -15,13 +15,9 @@ function RecipeInProgress() {
   const local = history.location.pathname;
   const splitedId = local.split('/')[2];
 
-  const { recipeDetail, setRecipeDetail, ingredients,
-    copied, setCopied, favorite, setFavorite,
-    loading, setLoading, setIngredients,
-    tickedIngredient, setTickedIngredient,
-  } = useContext(AppContext);
-
-  const [cboxIngredient, setCboxIngredient] = useState({});
+  const { recipeDetail, setRecipeDetail, ingredients, copied, setCopied, favorite,
+    setFavorite, loading, setLoading, setIngredients, tickedIngredient,
+    setTickedIngredient, completed, setCompleted } = useContext(AppContext);
 
   const ingredientsAndMeasures = (detailRecipe) => {
     const all = Object.entries(detailRecipe[0]);
@@ -40,8 +36,7 @@ function RecipeInProgress() {
   };
 
   const copyRecipePath = () => {
-    const copiedUrl = `http://localhost:3000${local.split('/in-')[0]}`;
-    copy(copiedUrl);
+    copy(`http://localhost:3000${local.split('/in-')[0]}`);
     setCopied(true);
   };
 
@@ -117,28 +112,23 @@ function RecipeInProgress() {
   };
 
   const verifyIngredient = ({ target }) => {
-    // console.log(target.id);
     const it = target.id;
     const newObj = tickedIngredient;
 
     newObj[it] = !newObj[it];
     setTickedIngredient(newObj);
-    // setTickedIngredient(newObj);
-
-    // let newArray = [...cboxIngredient];
-    // console.log('antes', newArray);
-    // const isFound = newArray.some((item) => item === it);
-
-    // if (!isFound) {
-    //   newArray.push(it);
-    // } else {
-    //   newArray = newArray.filter((item) => item !== it);
-    // }
-    // console.log('depois', newArray);
-    // setCboxIngredient(newArray);
 
     const newArr = Object.entries(newObj);
     const newLocStor = newArr.filter((item) => item[1] === true).map((item) => item[0]);
+    const clickedItems = Object.values(newObj);
+    console.log(clickedItems, ingredients);
+    const x = clickedItems.every((item) => item === true);
+    if (clickedItems.length === ingredients.length && x === true) {
+      console.log('aq');
+      setCompleted(true);
+    } else {
+      setCompleted(false);
+    }
 
     verifyProgress(newLocStor);
   };
@@ -146,7 +136,6 @@ function RecipeInProgress() {
   const retrieveLSProgressRecipes = () => {
     const locStor = returnLSProgressRecipes();
     if (local.includes('meals')) {
-      console.log(locStor.meals);
       const arrProgress = locStor.meals[splitedId] || [];
       const newObj = {};
       arrProgress.forEach((element) => {
@@ -154,9 +143,7 @@ function RecipeInProgress() {
       });
       setTickedIngredient(newObj);
     }
-
     if (local.includes('drinks')) {
-      console.log(locStor.drinks);
       const arrProgress = locStor.drinks[splitedId] || [];
       const newObj = {};
       arrProgress.forEach((element) => {
@@ -188,13 +175,6 @@ function RecipeInProgress() {
     verifyPath();
     verifyIfIsFavorite();
     retrieveLSProgressRecipes();
-
-    // const myObj = {};
-    // ingredients.forEach((item) => {
-    //   myObj[item] = false;
-    // });
-
-    // setCboxIngredient(myObj);
   }, []);
 
   return (
@@ -249,7 +229,9 @@ function RecipeInProgress() {
             }
             finishBtn={
               <button
+                className="finish-btn"
                 data-testid="finish-recipe-btn"
+                disabled={ !completed }
                 onClick={ redirectToDone }
                 type="button"
               >

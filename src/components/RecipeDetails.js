@@ -83,7 +83,7 @@ function RecipeDetails() {
 
   const verifyIfIsDone = () => {
     const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
-    || { };
+    || [];
     if (recoverDone === true) {
       setCompleted(true);
     } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
@@ -112,7 +112,6 @@ function RecipeDetails() {
     const verifying = recoverFav.some((item) => item.id === splitedId);
 
     if (verifying) { setFavorite(true); } else { setFavorite(false); }
-    console.log(recoverFav);
   };
 
   const saveFavoriteRecipe = (localFavRec) => {
