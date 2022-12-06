@@ -83,21 +83,21 @@ function RecipeInProgress() {
     history.push('/done-recipes');
   };
 
-  const verifyProgress = () => {
-    const recoverInProgress = JSON.parse(localStorage.getItem('inProgressRecipes')) || {
-      drinks: {
-      },
-      meals: {
-      },
-    };
+  const returnLSProgressRecipes = () => JSON
+    .parse(localStorage.getItem('inProgressRecipes'))
+    || { drinks: {}, meals: {} };
+
+  const verifyProgress = (newLocalStorage) => {
+    const recoverInProgress = returnLSProgressRecipes();
 
     if (local.includes('meals')) {
       const saveMeal = {
         drinks: {
           ...recoverInProgress.drinks,
         },
-        meals: { ...recoverInProgress.meals,
-          [splitedId]: tickedIngredient,
+        meals: {
+          ...recoverInProgress.meals,
+          [splitedId]: newLocalStorage,
         },
       };
       localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
@@ -106,7 +106,7 @@ function RecipeInProgress() {
       const saveDrink = {
         drinks: {
           ...recoverInProgress.drinks,
-          [splitedId]: tickedIngredient,
+          [splitedId]: newLocalStorage,
         },
         meals: {
           ...recoverInProgress.meals,
@@ -116,12 +116,54 @@ function RecipeInProgress() {
     }
   };
 
-  const verifyIngredient = (it) => {
-    const newObj = cboxIngredient;
+  const verifyIngredient = ({ target }) => {
+    // console.log(target.id);
+    const it = target.id;
+    const newObj = tickedIngredient;
 
     newObj[it] = !newObj[it];
-    setCboxIngredient(newObj);
-    verifyProgress();
+    setTickedIngredient(newObj);
+    // setTickedIngredient(newObj);
+
+    // let newArray = [...cboxIngredient];
+    // console.log('antes', newArray);
+    // const isFound = newArray.some((item) => item === it);
+
+    // if (!isFound) {
+    //   newArray.push(it);
+    // } else {
+    //   newArray = newArray.filter((item) => item !== it);
+    // }
+    // console.log('depois', newArray);
+    // setCboxIngredient(newArray);
+
+    const newArr = Object.entries(newObj);
+    const newLocStor = newArr.filter((item) => item[1] === true).map((item) => item[0]);
+
+    verifyProgress(newLocStor);
+  };
+
+  const retrieveLSProgressRecipes = () => {
+    const locStor = returnLSProgressRecipes();
+    if (local.includes('meals')) {
+      console.log(locStor.meals);
+      const arrProgress = locStor.meals[splitedId] || [];
+      const newObj = {};
+      arrProgress.forEach((element) => {
+        newObj[element] = true;
+      });
+      setTickedIngredient(newObj);
+    }
+
+    if (local.includes('drinks')) {
+      console.log(locStor.drinks);
+      const arrProgress = locStor.drinks[splitedId] || [];
+      const newObj = {};
+      arrProgress.forEach((element) => {
+        newObj[element] = true;
+      });
+      setTickedIngredient(newObj);
+    }
   };
 
   useEffect(() => {
@@ -145,18 +187,19 @@ function RecipeInProgress() {
     };
     verifyPath();
     verifyIfIsFavorite();
+    retrieveLSProgressRecipes();
 
-    const myObj = {};
-    ingredients.forEach((item) => {
-      myObj[item] = false;
-    });
+    // const myObj = {};
+    // ingredients.forEach((item) => {
+    //   myObj[item] = false;
+    // });
 
-    setCboxIngredient(myObj);
+    // setCboxIngredient(myObj);
   }, []);
 
   return (
     <main>
-      { loading ? <Loading /> : (
+      {loading ? <Loading /> : (
         recipeDetail.map((item) => (
           <CardProgress
             key={ Math.random() }
@@ -176,8 +219,8 @@ function RecipeInProgress() {
               >
                 <input
                   id={ it }
-                  onChange={ () => verifyIngredient(it) }
-                  checked={ cboxIngredient[it] }
+                  onChange={ (e) => verifyIngredient(e) }
+                  checked={ tickedIngredient[it] }
                   type="checkbox"
                 />
                 {it}
