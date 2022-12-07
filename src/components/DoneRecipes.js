@@ -1,11 +1,16 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from './Header';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
+const copy = require('clipboard-copy');
+
 function DoneRecipes() {
   const responseDone = JSON.parse(localStorage.getItem('doneRecipes'));
   const [done, setDone] = useState(responseDone);
+  const [isCopied, setIsCopied] = useState('');
+
   const filterMeals = () => {
     const filterMeal = responseDone.filter((e) => e.type === 'meal');
     setDone(filterMeal);
@@ -20,6 +25,17 @@ function DoneRecipes() {
     setDone(responseDone);
     console.log(responseDone);
   };
+
+  const handleShare = (type, id) => {
+    if (type === 'drink') {
+      copy(`http://localhost:3000/drinks/${id}`);
+      setIsCopied(id);
+    } if (type === 'meal') {
+      copy(`http://localhost:3000/meals/${id}`);
+      setIsCopied(id);
+    }
+  };
+
   return (
     <div>
       <Header headerText="Done Recipes" enableSearchButton={ false } />
@@ -49,16 +65,25 @@ function DoneRecipes() {
           .map((element, index) => {
             if (element.type === 'meal') {
               return (
-                <div key={ index }>
-                  <img
-                    data-testid={ `${index}-horizontal-image` }
-                    src={ element.image }
-                    alt={ element.name }
-                  />
+                <div
+                  className="teste"
+                  key={ index }
+                >
+                  <Link to={ `/meals/${element.id}` }>
+                    <img
+                      height={ 300 }
+                      width={ 300 }
+                      data-testid={ `${index}-horizontal-image` }
+                      src={ element.image }
+                      alt={ element.name }
+                    />
+                  </Link>
                   <p data-testid={ `${index}-horizontal-top-text` }>
                     { `${element.nationality} - ${element.category}` }
                   </p>
-                  <p data-testid={ `${index}-horizontal-name` }>{ element.name}</p>
+                  <Link to={ `/meals/${element.id}` }>
+                    <p data-testid={ `${index}-horizontal-name` }>{ element.name}</p>
+                  </Link>
                   <p
                     data-testid={ `${index}-horizontal-done-date` }
                   >
@@ -83,28 +108,37 @@ function DoneRecipes() {
                   >
                     <img src={ blackHeartIcon } alt={ element.name } />
                   </button>
-                  <button
-                    type="button"
-                    data-testid={ `${index}-horizontal-share-btn` }
-                    onClick={ () => {} }
-                    src="shareIcon"
-                  >
-                    <img src={ shareIcon } alt={ element.name } />
-                  </button>
+                  {
+                    isCopied === element.id ? <p>Link copied!</p> : (
+                      <button
+                        type="button"
+                        data-testid={ `${index}-horizontal-share-btn` }
+                        onClick={ () => handleShare(element.type, element.id) }
+                        src="shareIcon"
+                      >
+                        <img src={ shareIcon } alt={ element.name } />
+                      </button>)
+                  }
                 </div>
               );
             }
             return (
-              <div key={ index }>
-                <img
-                  data-testid={ `${index}-horizontal-image` }
-                  src={ element.image }
-                  alt={ element.name }
-                />
+              <div className="teste" key={ index }>
+                <Link to={ `/drinks/${element.id}` }>
+                  <img
+                    height={ 300 }
+                    width={ 300 }
+                    data-testid={ `${index}-horizontal-image` }
+                    src={ element.image }
+                    alt={ element.name }
+                  />
+                </Link>
                 <p data-testid={ `${index}-horizontal-top-text` }>
                   { element.alcoholicOrNot }
                 </p>
-                <p data-testid={ `${index}-horizontal-name` }>{ element.name}</p>
+                <Link to={ `/drinks/${element.id}` }>
+                  <p data-testid={ `${index}-horizontal-name` }>{ element.name}</p>
+                </Link>
                 <p
                   data-testid={ `${index}-horizontal-done-date` }
                 >
@@ -128,14 +162,17 @@ function DoneRecipes() {
                 >
                   <img src={ blackHeartIcon } alt={ element.name } />
                 </button>
-                <button
-                  type="button"
-                  data-testid={ `${index}-horizontal-share-btn` }
-                  onClick={ () => {} }
-                  src="shareIcon"
-                >
-                  <img src={ shareIcon } alt={ element.name } />
-                </button>
+                {
+                  isCopied === element.id ? <p>Link copied!</p> : (
+                    <button
+                      type="button"
+                      data-testid={ `${index}-horizontal-share-btn` }
+                      onClick={ () => handleShare(element.type, element.id) }
+                      src="shareIcon"
+                    >
+                      <img src={ shareIcon } alt={ element.name } />
+                    </button>)
+                }
               </div>
             );
           })
