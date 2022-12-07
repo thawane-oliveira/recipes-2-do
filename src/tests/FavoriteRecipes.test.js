@@ -2,7 +2,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../services/renderWithRouter';
-import FavoriteRecipes from '../pages/FavoriteRecipes';
+import FavoriteRecipes from '../components/FavoriteRecipes';
 
 /* afterEach(() => {
   jest.clearAllMocks();
