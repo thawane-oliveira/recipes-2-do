@@ -7,23 +7,20 @@ import shareIcon from '../images/shareIcon.svg';
 const copy = require('clipboard-copy');
 
 function DoneRecipes() {
-  const responseDone = JSON.parse(localStorage.getItem('doneRecipes'));
+  const responseDone = JSON.parse(localStorage.getItem('doneRecipes')) || [];
   const [done, setDone] = useState(responseDone);
   const [isCopied, setIsCopied] = useState('');
 
   const filterMeals = () => {
     const filterMeal = responseDone.filter((e) => e.type === 'meal');
     setDone(filterMeal);
-    console.log(filterMeal);
   };
   const filterDrinks = () => {
     const filterDrink = responseDone.filter((e) => e.type === 'drink');
     setDone(filterDrink);
-    console.log(filterDrink);
   };
   const filterAll = () => {
     setDone(responseDone);
-    console.log(responseDone);
   };
 
   const handleShare = (type, id) => {
