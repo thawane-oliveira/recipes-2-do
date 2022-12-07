@@ -21,6 +21,10 @@ label:has( input:checked ) {
   text-decoration: line-through solid black;
 }
 
+.teste {
+  margin-bottom: 60px;
+}
+
 /*
 https://stackoverflow.com/questions/73858776/change-background-color-of-label-when-input-radio-is-checked
 */

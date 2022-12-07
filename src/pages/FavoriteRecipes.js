@@ -37,6 +37,14 @@ function FavoriteRecipes() {
     }
   };
 
+  const handleFavorite = (id) => {
+    const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const newArr = recoverFav.filter((element) => element.id !== id);
+
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newArr));
+    setFav(newArr);
+  };
+
   return (
     <div>
       <Header headerText="Favorite Recipes" enableSearchButton={ false } />
@@ -69,7 +77,7 @@ function FavoriteRecipes() {
           .map((element, index) => {
             if (element.type === 'meal') {
               return (
-                <div key={ index }>
+                <div className="teste" key={ index }>
                   <img
                     data-testid={ `${index}-horizontal-image` }
                     src={ element.image }
@@ -84,7 +92,7 @@ function FavoriteRecipes() {
                   <button
                     type="button"
                     data-testid={ `${index}-horizontal-favorite-btn` }
-                    onClick={ () => {} }
+                    onClick={ () => handleFavorite(element.id) }
                     src="blackHeartIcon"
                   >
                     <img src={ blackHeartIcon } alt={ element.name } />
@@ -105,7 +113,7 @@ function FavoriteRecipes() {
               );
             }
             return (
-              <div key={ index }>
+              <div className="teste" key={ index }>
                 <img
                   data-testid={ `${index}-horizontal-image` }
                   src={ element.image }
@@ -121,7 +129,7 @@ function FavoriteRecipes() {
                 <button
                   type="button"
                   data-testid={ `${index}-horizontal-favorite-btn` }
-                  onClick={ () => {} }
+                  onClick={ () => handleFavorite(element.id) }
                   src="blackHeartIcon"
                 >
                   <img src={ blackHeartIcon } alt={ element.name } />
