@@ -133,7 +133,6 @@ function RecipeInProgress() {
     target.classList.toggle('active');
     target.nextSibling.classList.toggle('active');
 
-    console.log(target);
     const newObj = tickedIngredient;
 
     newObj[it] = !newObj[it];
@@ -190,7 +189,7 @@ function RecipeInProgress() {
                 key={ it }
                 data-testid={ `${index}-ingredient-step` }
                 htmlFor={ it }
-                // className={ tickedIngredient[it] ? 'active' : 'nada' }
+                className={ tickedIngredient[it] ? 'active' : 'nada' }
               >
                 <input
                   id={ it }
