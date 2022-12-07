@@ -127,8 +127,13 @@ function RecipeInProgress() {
     setTickedIngredient(newObj);
   };
 
-  const verifyIngredient = (it) => {
+  const verifyIngredient = (target, it) => {
     // console.log('bug do Cypress');
+    target.parentNode.classList.toggle('active');
+    target.classList.toggle('active');
+    target.nextSibling.classList.toggle('active');
+
+    console.log(target);
     const newObj = tickedIngredient;
 
     newObj[it] = !newObj[it];
@@ -185,14 +190,17 @@ function RecipeInProgress() {
                 key={ it }
                 data-testid={ `${index}-ingredient-step` }
                 htmlFor={ it }
+                // className={ tickedIngredient[it] ? 'active' : 'nada' }
               >
                 <input
                   id={ it }
-                  onChange={ () => verifyIngredient(it) }
+                  onChange={ (e) => verifyIngredient(e.target, it) }
                   checked={ tickedIngredient[it] }
                   type="checkbox"
                 />
-                {it}
+                <p>
+                  {it}
+                </p>
               </label>
             )) }
             instructions={ item.strInstructions }

@@ -15,8 +15,8 @@ afterEach(() => {
 
 const meals52997 = '/meals/52977';
 
-describe('Testes do componente Recipes', () => {
-  it('Testa se ao entrar na rota /meals, é possível entrar na tela de detalhes de uma receita', async () => {
+describe('Testes do componente Recipe Details', () => {
+  it.only('Testa se ao entrar na rota /meals, é possível entrar na tela de detalhes de uma receita', async () => {
     jest.spyOn(global, 'fetch');
     global.fetch.mockResolvedValueOnce(
       { json: jest.fn().mockResolvedValue(mockMealById) },
