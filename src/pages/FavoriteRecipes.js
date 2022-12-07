@@ -7,7 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 const copyURL = require('clipboard-copy');
 
 function FavoriteRecipes() {
-  const responseFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  const responseFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
   const [fav, setFav] = useState(responseFav);
   const [isCopied, setIsCopied] = useState('');
 
