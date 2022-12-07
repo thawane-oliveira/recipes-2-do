@@ -43,7 +43,6 @@ function RecipeInProgress() {
   const verifyIfIsFavorite = () => {
     const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
     const verifying = recoverFav.some((item) => item.id === splitedId);
-
     if (verifying) { setFavorite(true); } else { setFavorite(false); }
   };
 
@@ -75,16 +74,34 @@ function RecipeInProgress() {
   };
 
   const redirectToDone = () => {
+    const recoverDone = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+
+    const x = recipeDetail[0].strTags;
+    // console.log(Object.values(x), recipeDetail[0]);
+    const tag = x === null ? [] : x.split(',');
+
+    const objDoneRecipe = {
+      id: recipeDetail[0].idMeal || recipeDetail[0].idDrink,
+      type: local.includes('meals') ? 'meal' : 'drink',
+      nationality: recipeDetail[0].strArea || '',
+      category: recipeDetail[0].strCategory || '',
+      alcoholicOrNot: recipeDetail[0].strAlcoholic || '',
+      name: recipeDetail[0].strDrink || recipeDetail[0].strMeal,
+      image: recipeDetail[0].strDrinkThumb || recipeDetail[0].strMealThumb,
+      doneDate: new Date(),
+      tags: tag,
+    };
+    const newDoneRecipe = [...recoverDone, objDoneRecipe];
+    localStorage.setItem('doneRecipes', JSON.stringify(newDoneRecipe));
+
     history.push('/done-recipes');
   };
 
   const returnLSProgressRecipes = () => JSON
-    .parse(localStorage.getItem('inProgressRecipes'))
-    || { drinks: {}, meals: {} };
+    .parse(localStorage.getItem('inProgressRecipes')) || { drinks: {}, meals: {} };
 
   const verifyProgress = (newLocalStorage) => {
     const recoverInProgress = returnLSProgressRecipes();
-
     if (local.includes('meals')) {
       const saveMeal = {
         drinks: {
@@ -111,28 +128,6 @@ function RecipeInProgress() {
     }
   };
 
-  const verifyIngredient = ({ target }) => {
-    const it = target.id;
-    const newObj = tickedIngredient;
-
-    newObj[it] = !newObj[it];
-    setTickedIngredient(newObj);
-
-    const newArr = Object.entries(newObj);
-    const newLocStor = newArr.filter((item) => item[1] === true).map((item) => item[0]);
-    const clickedItems = Object.values(newObj);
-    console.log(clickedItems, ingredients);
-    const x = clickedItems.every((item) => item === true);
-    if (clickedItems.length === ingredients.length && x === true) {
-      console.log('aq');
-      setCompleted(true);
-    } else {
-      setCompleted(false);
-    }
-
-    verifyProgress(newLocStor);
-  };
-
   const retrieveLSProgressRecipes = () => {
     const locStor = returnLSProgressRecipes();
     if (local.includes('meals')) {
@@ -153,12 +148,29 @@ function RecipeInProgress() {
     }
   };
 
+  const verifyIngredient = ({ target }) => {
+    const it = target.id;
+    const newObj = tickedIngredient;
+
+    newObj[it] = !newObj[it];
+    setTickedIngredient(newObj);
+
+    const newArr = Object.entries(newObj);
+    const newLocStor = newArr.filter((item) => item[1] === true).map((item) => item[0]);
+    const clickedItems = Object.values(newObj);
+    const x = clickedItems.every((item) => item === true);
+    if (clickedItems.length === ingredients.length && x === true) {
+      setCompleted(true);
+    } else { setCompleted(false); }
+    verifyProgress(newLocStor);
+    // retrieveLSProgressRecipes();
+  };
+
   useEffect(() => {
     const verifyPath = async () => {
       if (local.includes('meals')) {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
-
         setRecipeDetail(data.meals);
         ingredientsAndMeasures(data.meals);
         setLoading(false);
@@ -166,7 +178,6 @@ function RecipeInProgress() {
       if (local.includes('drinks')) {
         const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
         const data = await response.json();
-
         setRecipeDetail(data.drinks);
         ingredientsAndMeasures(data.drinks);
         setLoading(false);
