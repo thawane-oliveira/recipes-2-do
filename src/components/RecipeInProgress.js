@@ -128,8 +128,8 @@ function RecipeInProgress() {
   };
 
   const verifyIngredient = (it) => {
-    console.log('alterar para cypress');
-    const newObj = { ...tickedIngredient };
+    // console.log('bug do Cypress');
+    const newObj = tickedIngredient;
 
     newObj[it] = !newObj[it];
     setTickedIngredient(newObj);
