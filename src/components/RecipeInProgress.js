@@ -14,6 +14,7 @@ function RecipeInProgress() {
   const history = useHistory();
   const local = history.location.pathname;
   const splitedId = local.split('/')[2];
+  const myLocal = local.includes('meals') ? 'meals' : 'drinks';
 
   const { recipeDetail, setRecipeDetail, ingredients, copied, setCopied, favorite,
     setFavorite, loading, setLoading, setIngredients, tickedIngredient,
@@ -43,54 +44,62 @@ function RecipeInProgress() {
   const verifyIfIsFavorite = () => {
     const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
     const verifying = recoverFav.some((item) => item.id === splitedId);
-    if (verifying) { setFavorite(true); } else { setFavorite(false); }
+    setFavorite(verifying);
   };
 
   const saveFavoriteRecipe = (localFavRec) => {
+    const { idMeal, idDrink, strArea, strCategory, strAlcoholic, strDrink,
+      strMeal, strDrinkThumb, strMealThumb } = recipeDetail[0];
+
     const objFavRecipe = {
-      id: recipeDetail[0].idMeal || recipeDetail[0].idDrink,
+      id: idMeal || idDrink,
       type: local.includes('meals') ? 'meal' : 'drink',
-      nationality: recipeDetail[0].strArea || '',
-      category: recipeDetail[0].strCategory,
-      alcoholicOrNot: recipeDetail[0].strAlcoholic || '',
-      name: recipeDetail[0].strDrink || recipeDetail[0].strMeal,
-      image: recipeDetail[0].strDrinkThumb || recipeDetail[0].strMealThumb,
+      nationality: strArea || '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic || '',
+      name: strDrink || strMeal,
+      image: strDrinkThumb || strMealThumb,
     };
-    const newFavRecipe = [...localFavRec, objFavRecipe];
-    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavRecipe));
+
+    const newFavObj = [...localFavRec, objFavRecipe];
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavObj));
   };
 
   const removeFromFavorite = (localFavRec) => {
-    const verifying = localFavRec.filter((it) => it.id !== splitedId);
-    localStorage.setItem('favoriteRecipes', JSON.stringify(verifying));
+    const newFavObj = localFavRec.filter((it) => it.id !== splitedId);
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavObj));
   };
 
   const fillOrEmptyHeart = () => {
     const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
-    if (favorite === true) {
+    if (favorite) {
       removeFromFavorite(recoverFav);
-    } else { saveFavoriteRecipe(recoverFav); }
+    } else {
+      saveFavoriteRecipe(recoverFav);
+    }
     verifyIfIsFavorite();
   };
 
   const redirectToDone = () => {
     const recoverDone = JSON.parse(localStorage.getItem('doneRecipes')) || [];
 
-    const x = recipeDetail[0].strTags;
-    // console.log(Object.values(x), recipeDetail[0]);
-    const tag = x === null ? [] : x.split(',');
+    const { strTags, idMeal, idDrink, strArea, strCategory, strAlcoholic, strDrink,
+      strMeal, strDrinkThumb, strMealThumb } = recipeDetail[0];
+
+    const tag = strTags === null ? [] : strTags.split(',');
 
     const objDoneRecipe = {
-      id: recipeDetail[0].idMeal || recipeDetail[0].idDrink,
+      id: idMeal || idDrink,
       type: local.includes('meals') ? 'meal' : 'drink',
-      nationality: recipeDetail[0].strArea || '',
-      category: recipeDetail[0].strCategory || '',
-      alcoholicOrNot: recipeDetail[0].strAlcoholic || '',
-      name: recipeDetail[0].strDrink || recipeDetail[0].strMeal,
-      image: recipeDetail[0].strDrinkThumb || recipeDetail[0].strMealThumb,
+      nationality: strArea || '',
+      category: strCategory || '',
+      alcoholicOrNot: strAlcoholic || '',
+      name: strDrink || strMeal,
+      image: strDrinkThumb || strMealThumb,
       doneDate: new Date(),
       tags: tag,
     };
+
     const newDoneRecipe = [...recoverDone, objDoneRecipe];
     localStorage.setItem('doneRecipes', JSON.stringify(newDoneRecipe));
 
@@ -102,54 +111,23 @@ function RecipeInProgress() {
 
   const verifyProgress = (newLocalStorage) => {
     const recoverInProgress = returnLSProgressRecipes();
-    if (local.includes('meals')) {
-      const saveMeal = {
-        drinks: {
-          ...recoverInProgress.drinks,
-        },
-        meals: {
-          ...recoverInProgress.meals,
-          [splitedId]: newLocalStorage,
-        },
-      };
-      localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
-    }
-    if (local.includes('drinks')) {
-      const saveDrink = {
-        drinks: {
-          ...recoverInProgress.drinks,
-          [splitedId]: newLocalStorage,
-        },
-        meals: {
-          ...recoverInProgress.meals,
-        },
-      };
-      localStorage.setItem('inProgressRecipes', JSON.stringify(saveDrink));
-    }
+    const saveRecipe = {
+      ...recoverInProgress, [myLocal]: { [splitedId]: newLocalStorage },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(saveRecipe));
   };
 
   const retrieveLSProgressRecipes = () => {
     const locStor = returnLSProgressRecipes();
-    if (local.includes('meals')) {
-      const arrProgress = locStor.meals[splitedId] || [];
-      const newObj = {};
-      arrProgress.forEach((element) => {
-        newObj[element] = true;
-      });
-      setTickedIngredient(newObj);
-    }
-    if (local.includes('drinks')) {
-      const arrProgress = locStor.drinks[splitedId] || [];
-      const newObj = {};
-      arrProgress.forEach((element) => {
-        newObj[element] = true;
-      });
-      setTickedIngredient(newObj);
-    }
+    const arrProgress = locStor[myLocal][splitedId] || [];
+    const newObj = {};
+    arrProgress.forEach((element) => {
+      newObj[element] = true;
+    });
+    setTickedIngredient(newObj);
   };
 
-  const verifyIngredient = ({ target }) => {
-    const it = target.id;
+  const verifyIngredient = (it) => {
     const newObj = tickedIngredient;
 
     newObj[it] = !newObj[it];
@@ -158,31 +136,30 @@ function RecipeInProgress() {
     const newArr = Object.entries(newObj);
     const newLocStor = newArr.filter((item) => item[1] === true).map((item) => item[0]);
     const clickedItems = Object.values(newObj);
+
     const x = clickedItems.every((item) => item === true);
     if (clickedItems.length === ingredients.length && x === true) {
       setCompleted(true);
-    } else { setCompleted(false); }
+    } else {
+      setCompleted(false);
+    }
     verifyProgress(newLocStor);
-    // retrieveLSProgressRecipes();
+  };
+
+  const verifyPath = async () => {
+    const urls = {
+      meals: 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=',
+      drinks: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=',
+    };
+
+    const response = await fetch(`${urls[myLocal]}${splitedId}`);
+    const data = await response.json();
+    setRecipeDetail(data[myLocal]);
+    ingredientsAndMeasures(data[myLocal]);
+    setLoading(false);
   };
 
   useEffect(() => {
-    const verifyPath = async () => {
-      if (local.includes('meals')) {
-        const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
-        const data = await response.json();
-        setRecipeDetail(data.meals);
-        ingredientsAndMeasures(data.meals);
-        setLoading(false);
-      }
-      if (local.includes('drinks')) {
-        const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${splitedId}`);
-        const data = await response.json();
-        setRecipeDetail(data.drinks);
-        ingredientsAndMeasures(data.drinks);
-        setLoading(false);
-      }
-    };
     verifyPath();
     verifyIfIsFavorite();
     retrieveLSProgressRecipes();
@@ -210,13 +187,12 @@ function RecipeInProgress() {
               >
                 <input
                   id={ it }
-                  onChange={ (e) => verifyIngredient(e) }
+                  onChange={ () => verifyIngredient(it) }
                   checked={ tickedIngredient[it] }
                   type="checkbox"
                 />
                 {it}
               </label>
-
             )) }
             instructions={ item.strInstructions }
             shareBtn={ copied ? <p>Link copied! </p> : (

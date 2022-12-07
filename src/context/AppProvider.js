@@ -31,7 +31,7 @@ function AppProvider({ children }) {
   const [copied, setCopied] = useState(false);
   const [favorite, setFavorite] = useState(false);
   const [ticked, setTicked] = useState(true);
-  const [tickedIngredient, setTickedIngredient] = useState({});
+  const [tickedIngredient, setTickedIngredient] = useState([]);
 
   useEffect(() => {
     const minLength = 6;

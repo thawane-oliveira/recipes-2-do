@@ -8,18 +8,15 @@ function FavoriteRecipes() {
   const filterMeals = () => {
     const filterMeal = responseFav.filter((e) => e.type === 'meal');
     setFav(filterMeal);
-    console.log(filterMeal);
   };
 
   const filterDrinks = () => {
     const filterDrink = responseFav.filter((e) => e.type === 'drink');
     setFav(filterDrink);
-    console.log(filterDrink);
   };
 
   const filterAll = () => {
     setFav(responseFav);
-    console.log(responseFav);
   };
 
   return (
