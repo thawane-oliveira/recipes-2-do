@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
+import Header from './Header';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
@@ -159,4 +159,5 @@ function FavoriteRecipes() {
     </div>
   );
 }
+
 export default FavoriteRecipes;
