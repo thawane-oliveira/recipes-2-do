@@ -14,9 +14,9 @@ function CardProgress({
         data-testid="recipe-photo"
         alt={ title }
       />
-      <ul>
+      <div>
         {ing}
-      </ul>
+      </div>
       <p data-testid="instructions">{instructions}</p>
       {shareBtn}
       {favBtn}
@@ -29,11 +29,15 @@ function CardProgress({
 CardProgress.propTypes = {
   photo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  category: PropTypes.string.isRequired,
+  category: PropTypes.string,
   instructions: PropTypes.string.isRequired,
   ing: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   shareBtn: PropTypes.shape({}).isRequired,
   favBtn: PropTypes.shape({}).isRequired,
   finishBtn: PropTypes.shape({}).isRequired,
+};
+
+CardProgress.defaultProps = {
+  category: '',
 };
 export default CardProgress;

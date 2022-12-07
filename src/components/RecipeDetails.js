@@ -16,10 +16,12 @@ function RecipeDetails() {
   const splitedId = local.split('/')[2];
   const {
     recipeDetail, setRecipeDetail, setIngredients,
-    setRecommend, setLoading, loading, setCompleted,
+    setRecommend, setLoading, loading,
     progress, setProgress, copied, setCopied,
     favorite, setFavorite, ingredients, tickedIngredient,
   } = useContext(AppContext);
+
+  const myLocal = local.includes('meals') ? 'meals' : 'drinks';
 
   const ingredientsAndMeasures = (detailRecipe) => {
     const all = Object.entries(detailRecipe[0]);
@@ -40,69 +42,23 @@ function RecipeDetails() {
 
   const verifyProgress = () => {
     const recoverInProgress = JSON.parse(localStorage.getItem('inProgressRecipes'))
-      || {
-        drinks: {
-        },
-        meals: {
-        },
-      };
+    || { drinks: {}, meals: {} };
+    const verifying = Object.keys(recoverInProgress[myLocal]).includes(splitedId);
 
-    if (local.includes('meals')) {
-      const verifying = Object.keys(recoverInProgress.meals).includes(splitedId);
-      setProgress(verifying);
-
-      const saveMeal = {
-        drinks: {
-          ...recoverInProgress.drinks,
-        },
-        meals: { ...recoverInProgress.meals,
-          [splitedId]: tickedIngredient,
-        },
-      };
-
-      localStorage.setItem('inProgressRecipes', JSON.stringify(saveMeal));
-      // setProgress(true);
-    }
-    if (local.includes('drinks')) {
-      const verifying = Object.keys(recoverInProgress.drinks).includes(splitedId);
-      setProgress(verifying);
-
-      const saveDrink = {
-        drinks: {
-          ...recoverInProgress.drinks,
-          [splitedId]: tickedIngredient,
-        },
-        meals: { ...recoverInProgress.meals,
-        },
-      };
-
-      localStorage.setItem('inProgressRecipes', JSON.stringify(saveDrink));
-      // setProgress(true);
-    }
-  };
-
-  const verifyIfIsDone = () => {
-    const recoverDone = JSON.parse(localStorage.getItem('inProgressRecipes'))
-    || { };
-    if (recoverDone === true) {
-      setCompleted(true);
-    } // função inicial para receitas prontas/finalizadas, maiores implementações nos requisitos seguintes
+    const saveRecipe = {
+      ...recoverInProgress, [myLocal]: { [splitedId]: tickedIngredient },
+    };
+    localStorage.setItem('inProgressRecipes', JSON.stringify(saveRecipe));
+    setProgress(verifying);
   };
 
   const redirectRecipe = () => {
     verifyProgress();
-
-    if (local.includes('meals')) {
-      history.push(`/meals/${splitedId}/in-progress`);
-    }
-    if (local.includes('drinks')) {
-      history.push(`/drinks/${splitedId}/in-progress`);
-    }
+    history.push(`/${myLocal}/${splitedId}/in-progress`);
   };
 
   const copyRecipePath = () => {
-    const copiedUrl = `http://localhost:3000${local}`;
-    copy(copiedUrl);
+    copy(`http://localhost:3000${local}`);
     setCopied(true);
   };
 
@@ -110,23 +66,25 @@ function RecipeDetails() {
     const recoverFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
     // http://cangaceirojavascript.com.br/array-includes-vs-array-some/
     const verifying = recoverFav.some((item) => item.id === splitedId);
-
     if (verifying) { setFavorite(true); } else { setFavorite(false); }
-    console.log(recoverFav);
   };
 
   const saveFavoriteRecipe = (localFavRec) => {
+    const { idMeal, idDrink, strArea, strCategory, strAlcoholic, strDrink,
+      strMeal, strDrinkThumb, strMealThumb } = recipeDetail[0];
+
     const objFavRecipe = {
-      id: recipeDetail[0].idMeal || recipeDetail[0].idDrink,
+      id: idMeal || idDrink,
       type: local.includes('meals') ? 'meal' : 'drink',
-      nationality: recipeDetail[0].strArea || '',
-      category: recipeDetail[0].strCategory,
-      alcoholicOrNot: recipeDetail[0].strAlcoholic || '',
-      name: recipeDetail[0].strDrink || recipeDetail[0].strMeal,
-      image: recipeDetail[0].strDrinkThumb || recipeDetail[0].strMealThumb,
+      nationality: strArea || '',
+      category: strCategory,
+      alcoholicOrNot: strAlcoholic || '',
+      name: strDrink || strMeal,
+      image: strDrinkThumb || strMealThumb,
     };
-    const newFavRecipe = [...localFavRec, objFavRecipe];
-    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavRecipe));
+
+    const newFavObj = [...localFavRec, objFavRecipe];
+    localStorage.setItem('favoriteRecipes', JSON.stringify(newFavObj));
   };
 
   const removeFromFavorite = (localFavRec) => {
@@ -172,7 +130,6 @@ function RecipeDetails() {
       }
     };
     verifyPath();
-    verifyIfIsDone();
     verifyIfIsFavorite();
     verifyProgress();
   }, []);
@@ -199,9 +156,12 @@ function RecipeDetails() {
                 {it}
               </li>
             )) }
-            video={ history.location.pathname.includes('meals') && (
-              recipeDetail.map((i) => (i.strYoutube?.replace('watch?v=', 'embed/') // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
-              ))) }
+            video={
+              recipeDetail[0].strYoutube
+                ? recipeDetail[0].strYoutube.replace('watch?v=', 'embed/')
+                : ''
+              // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
+            }
           />
         )))}
       <button

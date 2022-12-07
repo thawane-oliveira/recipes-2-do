@@ -35,7 +35,7 @@ CardDetails.propTypes = {
   title: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
   instructions: PropTypes.string.isRequired,
-  video: PropTypes.arrayOf(PropTypes.string).isRequired,
+  video: PropTypes.string.isRequired,
   ing: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 export default CardDetails;
