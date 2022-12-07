@@ -8,6 +8,11 @@ footer {
   position: fixed;
 }
 
+.finish-btn {
+  bottom: 0;
+  position: fixed;
+}
+
 .button-container {
   height: 100vh;
   width: 100vw;
@@ -17,9 +22,9 @@ footer {
   text-decoration: line-through solid black;
 }
 
-label:has( input:checked ) {
+/* label:has( input:checked ) {
   text-decoration: line-through solid black;
-}
+} */
 
 /*
 https://stackoverflow.com/questions/73858776/change-background-color-of-label-when-input-radio-is-checked

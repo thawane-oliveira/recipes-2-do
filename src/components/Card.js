@@ -9,7 +9,6 @@ function Card({ index, photo, title, id }) {
   const verifyId = () => {
     <RecipeDetails id={ id } />;
     if (local.includes('drinks')) return `/drinks/${id}`;
-    // if (local.includes('meals')) return `/meals/${id}`;
     return `/meals/${id}`;
   };
 
