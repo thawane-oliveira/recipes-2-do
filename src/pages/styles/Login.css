@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap') ;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates&display=swap') ;
+
+@media ( max-width : 360px ) {
+
+  .teste {
+    background-image: linear-gradient(lightpink, pink);
+    height: 640px;
+    width: 360px;
+  }
+
+  .loginContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .email, .password, .submit-button {
+    border-radius: 10%;
+    box-shadow: none;
+    font-family: Montserrat Alternates , sans-serif;
+    margin-top: 50px;
+    text-align: center;
+    width: 50%;
+  }
+
+  .login-img {
+    height: auto;
+    margin: 0 auto;
+    margin-top: 20px;
+    max-height: 45vh;
+    max-width: 45vw;
+    width: auto;
+  }
+
+  .loginTitle {
+    font-family: Great Vibes , cursive;
+    font-size: 40px;
+    margin-top: 50px;
+  }
+
+  .submit-button {
+    background-color: black;
+    color: white;
+  }
+
+  .submit-disabled {
+    background-color: #4f4f4f;
+    border-radius: 10%;
+    box-shadow: none;
+    color: white;
+    font-family: Montserrat Alternates , sans-serif;
+    margin-top: 50px;
+    text-align: center;
+    width: 50%;
+  }
+
+  .email:focus, .password:focus {
+    outline: none;
+  }
+
+  .loginFooter {
+    font-family: Montserrat Alternates , sans-serif;
+
+  }
+
+}
