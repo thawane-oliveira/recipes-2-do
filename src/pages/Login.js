@@ -26,7 +26,7 @@ function Login() {
         <input
           className="email"
           data-testid="email-input"
-          placeholder="Email"
+          placeholder="E-mail"
           onChange={ ({ target }) => {
             setEmail(target.value);
           } }
@@ -48,7 +48,6 @@ function Login() {
           onClick={ () => handleSubmit(email) }
         >
           Enter
-
         </button>
 
         <footer className="loginFooter">

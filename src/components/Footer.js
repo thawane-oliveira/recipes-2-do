@@ -19,6 +19,7 @@ function Footer() {
 
   return (
     <footer
+      className="geral-footer"
       data-testid="footer"
     >
       <button

@@ -13,14 +13,14 @@ function MerryGoRound() {
   const { recommend } = useContext(AppContext);
 
   return (
-    <Carousel>
+    <Carousel style={ { margin: 10 } }>
 
       { local.includes('meals') ? (
         recommend.map((item, index) => (
 
           <Carousel.Item key={ index } data-testid={ `${index}-recommendation-card` }>
             <img
-              className="merryImg"
+              className="d-block w-100"
               src={ item.strDrinkThumb }
               alt={ item.strDrink }
             />
@@ -38,8 +38,10 @@ function MerryGoRound() {
               src={ item.strMealThumb }
               alt={ item.strMeal }
             />
-            <Carousel.Caption data-testid={ `${index}-recommendation-title` }>
-              {item.strMeal}
+            <Carousel.Caption
+              data-testid={ `${index}-recommendation-title` }
+            >
+              <b>{item.strMeal}</b>
             </Carousel.Caption>
           </Carousel.Item>
 

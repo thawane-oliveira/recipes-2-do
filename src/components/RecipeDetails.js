@@ -7,6 +7,7 @@ import Loading from './Loading';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
+import './styles/RecipeDetails.css';
 
 const copy = require('clipboard-copy');
 
@@ -135,7 +136,7 @@ function RecipeDetails() {
   }, []);
 
   return (
-    <>
+    <main className="details-container">
       {loading ? <Loading /> : (
         recipeDetail.map((item) => (
           <CardDetails
@@ -162,6 +163,29 @@ function RecipeDetails() {
                 : ''
               // verificado em: https://stackoverflow.com/questions/21607808/convert-a-youtube-video-url-to-embed-code
             }
+            buttons={
+              <div className="button-container">
+                {copied ? <p className="copied">Link copied! </p> : (
+                  <button
+                    className="share-button"
+                    data-testid="share-btn"
+                    onClick={ copyRecipePath }
+                    type="button"
+                  >
+                    <img src={ shareIcon } alt="share icon" />
+                  </button>
+                )}
+                <button
+                  className="fav-button"
+                  data-testid="favorite-btn"
+                  onClick={ fillOrEmptyHeart }
+                  src={ favorite ? blackHeart : whiteHeart }
+                  type="button"
+                >
+                  <img src={ favorite ? blackHeart : whiteHeart } alt="heart icon" />
+                </button>
+              </div>
+            }
           />
         )))}
       <button
@@ -172,26 +196,7 @@ function RecipeDetails() {
       >
         {progress ? 'Continue Recipe' : 'Start Recipe'}
       </button>
-      <div className="button-container">
-        {copied ? <p>Link copied! </p> : (
-          <button
-            data-testid="share-btn"
-            onClick={ copyRecipePath }
-            type="button"
-          >
-            <img src={ shareIcon } alt="share icon" />
-          </button>
-        )}
-        <button
-          data-testid="favorite-btn"
-          onClick={ fillOrEmptyHeart }
-          src={ favorite ? blackHeart : whiteHeart }
-          type="button"
-        >
-          <img src={ favorite ? blackHeart : whiteHeart } alt="heart icon" />
-        </button>
-      </div>
-    </>
+    </main>
   );
 }
 

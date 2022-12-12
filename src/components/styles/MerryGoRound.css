@@ -1,3 +1,8 @@
 .merryImg {
   width: 250px;
 }
+
+.carousel-caption {
+  font-size: 25px;
+  text-shadow: black 1px 1px 2px;
+}
