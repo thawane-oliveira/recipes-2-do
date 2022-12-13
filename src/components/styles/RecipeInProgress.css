@@ -4,7 +4,7 @@
 
 @media ( max-width : 360px ) {
 
-  .details-container {
+  .progress-main {
     background-image: linear-gradient(lightpink, blanchedalmond);
     font-family: Montserrat Alternates , sans-serif;
     height: 640px;
@@ -12,13 +12,13 @@
     width: 360px;
   }
 
-  .recipe-title {
+  .progress-title {
     font-family: Great Vibes , cursive;
     font-size: 42px;
     text-align: center;
   }
 
-  .card-details {
+  .progress-container {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -29,9 +29,8 @@
     width: 100%;
   }
 
-  .recipe-img {
+  .progress-img {
     border-radius: 8%;
-    box-shadow: 2px 2px 6px rgb(29, 29, 29);
     height: auto;
     margin: 3vh;
     max-height: 80vh;
@@ -39,41 +38,22 @@
     width: auto;
   }
 
-  .button-container {
-    align-items: center;
-    display: flex;
-    height: 5%;
-    justify-content: space-around;
-    width: 100%;
-  }
-
-  .fav-button, .share-button {
-    background-color: rgb(255, 244, 226);
-    border-radius: 8%;
-    height: 8vh;
-    width: 15vw;
-  }
-
   .copied {
     font-size: 18px;
   }
 
-  .start-recipe-btn {
-    background-color: rgb(255, 244, 226);
-    border-radius: 7%;
-    bottom: 0;
-    position: fixed;
-    transition: 0.5s;
+  .progress-ingredient {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    margin-bottom: 5vh;
+    width: 100%;
   }
 
-  .video {
-    border-radius: 3%;
-    box-shadow: 2px 2px 6px black;
-    height: auto;
-    margin-top: 3vh;
-    max-height: 80vh;
-    max-width: 80vw;
-    width: auto;
+  .ing-checkbox {
+    accent-color: pink;
+    margin: 1vh;
   }
 
   .return-img {
@@ -84,17 +64,34 @@
     width: auto;
   }
 
-  .return-button {
+  .progress-btn-container {
     align-items: center;
+    display: flex;
+    height: 30vh;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .progress-share, .progress-fav {
     background-color: rgb(255, 244, 226);
     border-radius: 8%;
     box-shadow: 2px 2px 6px rgb(29, 29, 29);
-    display: flex;
     height: 8vh;
-    justify-content: center;
-    margin: 2vh;
-    margin-right: 80vw;
+    margin-bottom: 2vh;
     width: 15vw;
+  }
+
+  .finish-btn {
+    background-color: rgb(255, 244, 226);
+    border-radius: 8%;
+    bottom: 0;
+    box-shadow: 2px 2px 6px rgb(29, 29, 29);
+    margin-bottom: 2vh;
+    position: fixed;
+  }
+
+  .active {
+    text-decoration: line-through solid black;
   }
 }
 

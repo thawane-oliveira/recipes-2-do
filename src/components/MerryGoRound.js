@@ -20,7 +20,7 @@ function MerryGoRound() {
 
           <Carousel.Item key={ index } data-testid={ `${index}-recommendation-card` }>
             <img
-              className="d-block w-100"
+              className="merryImg"
               src={ item.strDrinkThumb }
               alt={ item.strDrink }
             />

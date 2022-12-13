@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import MerryGoRound from './MerryGoRound';
 import './styles/RecipeDetails.css';
+import returnImg from '../images/return.png';
 
 function CardDetails({ title, photo, category, instructions, video, ing, buttons }) {
   const history = useHistory();
@@ -19,7 +20,7 @@ function CardDetails({ title, photo, category, instructions, video, ing, buttons
         onClick={ returnPrevious }
       >
         <img
-          src="https://cdn-icons-png.flaticon.com/512/61/61449.png?w=360"
+          src={ returnImg }
           alt="return-button"
           className="return-img"
         />

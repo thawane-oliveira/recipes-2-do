@@ -5,8 +5,8 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import Loading from './Loading';
-import './styles/style.css';
 import CardProgress from './CardProgress';
+import './styles/RecipeInProgress.css';
 
 const copy = require('clipboard-copy');
 
@@ -171,7 +171,7 @@ function RecipeInProgress() {
   }, []);
 
   return (
-    <main>
+    <main className="progress-main">
       {loading ? <Loading /> : (
         recipeDetail.map((item) => (
           <CardProgress
@@ -192,19 +192,19 @@ function RecipeInProgress() {
                 className={ tickedIngredient[it] ? 'active' : 'nada' }
               >
                 <input
+                  className="ing-checkbox"
                   id={ it }
                   onChange={ (e) => verifyIngredient(e.target, it) }
                   checked={ tickedIngredient[it] }
                   type="checkbox"
                 />
-                <p>
-                  {it}
-                </p>
+                {it}
               </label>
             )) }
             instructions={ item.strInstructions }
             shareBtn={ copied ? <p>Link copied! </p> : (
               <button
+                className="progress-share"
                 data-testid="share-btn"
                 onClick={ copyRecipePath }
                 type="button"
@@ -214,6 +214,7 @@ function RecipeInProgress() {
             ) }
             favBtn={
               <button
+                className="progress-fav"
                 data-testid="favorite-btn"
                 onClick={ fillOrEmptyHeart }
                 src={ favorite ? blackHeart : whiteHeart }

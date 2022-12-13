@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types';
-import './styles/style.css';
+import './styles/RecipeInProgress.css';
 
 function CardProgress({
   title, photo, category, instructions, ing, shareBtn, favBtn, finishBtn }) {
   return (
-    <>
-      <h3 data-testid="recipe-title">{title}</h3>
-      <h4 data-testid="recipe-category">
+    <div className="progress-container">
+      <h3 className="progress-title" data-testid="recipe-title">{title}</h3>
+      <h4 data-testid="recipe-category" className="progress-category">
         {category}
       </h4>
       <img
+        className="progress-img"
         src={ photo }
         data-testid="recipe-photo"
         alt={ title }
       />
-      <div>
+      <div className="progress-ingredient">
         {ing}
       </div>
-      <p data-testid="instructions">{instructions}</p>
-      {shareBtn}
-      {favBtn}
+      <p className="progress-instructions" data-testid="instructions">{instructions}</p>
+      <div className="progress-btn-container">
+        {shareBtn}
+        {favBtn}
+      </div>
       {finishBtn}
 
-    </>
+    </div>
   );
 }
 

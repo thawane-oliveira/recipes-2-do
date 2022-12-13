@@ -1,5 +1,11 @@
 .merryImg {
-  width: 250px;
+  border-radius: 3%;
+  box-shadow: 2px 2px 6px black;
+  height: auto;
+  margin: 3vh;
+  max-height: 80vh;
+  max-width: 80vw;
+  width: auto;
 }
 
 .carousel-caption {

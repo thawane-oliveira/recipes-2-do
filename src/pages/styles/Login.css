@@ -5,7 +5,7 @@
 @media ( max-width : 360px ) {
 
   .teste {
-    background-image: linear-gradient(lightpink, pink);
+    background-image: linear-gradient(lightpink, blanchedalmond);
     height: 640px;
     width: 360px;
   }
