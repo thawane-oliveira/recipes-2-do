@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;600&display=swap') ;
+
+@media ( max-width : 360px ) {
+
+  .profile-container {
+    background-image: linear-gradient(lightpink, blanchedalmond);
+    font-family: Montserrat Alternates , sans-serif;
+    height: 640px;
+    overflow: auto;
+    width: 360px;
+  }
+
+  .profile-email {
+    font-size: 28px;
+    margin: 2vh;
+    margin-bottom: 5vh;
+  }
+
+  .profile-btn {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 30vh;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .profile-fav, .profile-done, .profile-logout {
+    background-color: rgb(255, 244, 226);
+    border-radius: 5%;
+    box-shadow: 2px 2px 6px rgb(29, 29, 29);
+    height: 8.5vh;
+    margin: 5vh;
+    width: 50vw;
+  }
+}

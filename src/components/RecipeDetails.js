@@ -188,14 +188,16 @@ function RecipeDetails() {
             }
           />
         )))}
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        className="start-recipe-btn"
-        onClick={ redirectRecipe }
-      >
-        {progress ? 'Continue Recipe' : 'Start Recipe'}
-      </button>
+      <div className="start-container">
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          className="start-recipe-btn"
+          onClick={ redirectRecipe }
+        >
+          {progress ? 'Continue Recipe' : 'Start Recipe'}
+        </button>
+      </div>
     </main>
   );
 }

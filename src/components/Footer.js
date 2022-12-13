@@ -2,7 +2,7 @@
 import { useHistory } from 'react-router-dom';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
-import './styles/style.css';
+import './styles/Footer.css';
 // import { useState } from 'react';
 // import searchIcon from '../images/searchIcon.svg'
 
@@ -22,28 +22,30 @@ function Footer() {
       className="geral-footer"
       data-testid="footer"
     >
-      <button
-        type="button"
-        onClick={ () => handleRedirMeals() }
-
-      >
-        <img
-          src={ mealIcon }
-          alt="imag-meals"
-          data-testid="meals-bottom-btn"
-        />
-      </button>
-      <button
-        type="button"
-        onClick={ () => handleRedirCocktails() }
-      >
-        <img
-          src={ drinkIcon }
-          alt="imag-drinkIcon"
-          data-testid="drinks-bottom-btn"
-        />
-      </button>
-
+      <div className="footer-btn">
+        <button
+          className="meals-footer"
+          type="button"
+          onClick={ () => handleRedirMeals() }
+        >
+          <img
+            src={ mealIcon }
+            alt="imag-meals"
+            data-testid="meals-bottom-btn"
+          />
+        </button>
+        <button
+          className="drinks-footer"
+          type="button"
+          onClick={ () => handleRedirCocktails() }
+        >
+          <img
+            src={ drinkIcon }
+            alt="imag-drinkIcon"
+            data-testid="drinks-bottom-btn"
+          />
+        </button>
+      </div>
     </footer>
   );
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
+import './styles/FavoriteRecipes.css';
 
 const copyURL = require('clipboard-copy');
 
@@ -44,54 +45,118 @@ function FavoriteRecipes() {
   };
 
   return (
-    <div>
+    <div className="f-container">
       <Header headerText="Favorite Recipes" enableSearchButton={ false } />
-      <button
-        type="button"
-        data-testid="filter-by-all-btn"
-        onClick={ filterAll }
-      >
-        All
+      <div className="btn-container-filter">
+        <button
+          className="all-fav"
+          type="button"
+          data-testid="filter-by-all-btn"
+          onClick={ filterAll }
+        >
+          All
 
-      </button>
-      <button
-        type="button"
-        data-testid="filter-by-meal-btn"
-        onClick={ filterMeals }
-      >
-        Meals
+        </button>
+        <button
+          className="meals-fav"
+          type="button"
+          data-testid="filter-by-meal-btn"
+          onClick={ filterMeals }
+        >
+          Meals
 
-      </button>
-      <button
-        type="button"
-        data-testid="filter-by-drink-btn"
-        onClick={ filterDrinks }
-      >
-        Drinks
+        </button>
+        <button
+          className="drinks-fav"
+          type="button"
+          data-testid="filter-by-drink-btn"
+          onClick={ filterDrinks }
+        >
+          Drinks
 
-      </button>
+        </button>
+      </div>
       {
         fav
           .map((element, index) => {
             if (element.type === 'meal') {
               return (
-                <div className="teste" key={ index }>
+                <div className="fav-container" key={ index }>
                   <Link to={ `/meals/${element.id}` }>
                     <img
+                      className="img-fav"
                       data-testid={ `${index}-horizontal-image` }
                       src={ element.image }
                       alt={ element.name }
-                      height={ 300 } // alterei o tamanho para passar no teste, mudar depois
-                      width={ 300 }
                     />
                   </Link>
-                  <p data-testid={ `${index}-horizontal-top-text` }>
+                  <Link to={ `/meals/${element.id}` }>
+                    <p
+                      className="fav-title"
+                      data-testid={ `${index}-horizontal-name` }
+                    >
+                      { element.name}
+                    </p>
+                  </Link>
+                  <p
+                    className="fav-category"
+                    data-testid={ `${index}-horizontal-top-text` }
+                  >
                     { `${element.nationality} - ${element.category}` }
                   </p>
-                  <Link to={ `/meals/${element.id}` }>
-                    <p data-testid={ `${index}-horizontal-name` }>{ element.name}</p>
-                  </Link>
+                  <div className="small-container">
+                    <button
+                      className="fav-fav"
+                      type="button"
+                      data-testid={ `${index}-horizontal-favorite-btn` }
+                      onClick={ () => handleFavorite(element.id) }
+                      src="blackHeartIcon"
+                    >
+                      <img src={ blackHeartIcon } alt={ element.name } />
+                    </button>
+                    {
+                      isCopied === element.id ? <p>Link copied!</p> : (
+                        <button
+                          className="share-fav"
+                          type="button"
+                          data-testid={ `${index}-horizontal-share-btn` }
+                          onClick={ () => handleShare(element.type, element.id) }
+                          src="shareIcon"
+                        >
+                          <img src={ shareIcon } alt={ element.name } />
+                        </button>)
+                    }
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div className="fav-container" key={ index }>
+                <Link to={ `/drinks/${element.id}` }>
+                  <img
+                    className="img-fav"
+                    data-testid={ `${index}-horizontal-image` }
+                    src={ element.image }
+                    alt={ element.name }
+                  />
+                </Link>
+                <Link to={ `/drinks/${element.id}` }>
+                  <p
+                    className="fav-title"
+                    data-testid={ `${index}-horizontal-name` }
+                  >
+                    { element.name}
+                  </p>
+                </Link>
+                <p
+                  className="fav-category"
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  { element.alcoholicOrNot }
+                </p>
+                <div className="small-container">
                   <button
+                    className="fav-fav"
                     type="button"
                     data-testid={ `${index}-horizontal-favorite-btn` }
                     onClick={ () => handleFavorite(element.id) }
@@ -102,55 +167,17 @@ function FavoriteRecipes() {
                   {
                     isCopied === element.id ? <p>Link copied!</p> : (
                       <button
+                        className="share-fav"
                         type="button"
                         data-testid={ `${index}-horizontal-share-btn` }
                         onClick={ () => handleShare(element.type, element.id) }
                         src="shareIcon"
                       >
                         <img src={ shareIcon } alt={ element.name } />
-                      </button>)
+                      </button>
+                    )
                   }
-
                 </div>
-              );
-            }
-            return (
-              <div className="teste" key={ index }>
-                <Link to={ `/drinks/${element.id}` }>
-                  <img
-                    data-testid={ `${index}-horizontal-image` }
-                    src={ element.image }
-                    alt={ element.name }
-                    height={ 300 }
-                    width={ 300 }
-                  />
-
-                </Link>
-                <p data-testid={ `${index}-horizontal-top-text` }>
-                  { element.alcoholicOrNot }
-                </p>
-                <Link to={ `/drinks/${element.id}` }>
-                  <p data-testid={ `${index}-horizontal-name` }>{ element.name}</p>
-                </Link>
-                <button
-                  type="button"
-                  data-testid={ `${index}-horizontal-favorite-btn` }
-                  onClick={ () => handleFavorite(element.id) }
-                  src="blackHeartIcon"
-                >
-                  <img src={ blackHeartIcon } alt={ element.name } />
-                </button>
-                {
-                  isCopied === element.id ? <p>Link copied!</p> : (
-                    <button
-                      type="button"
-                      data-testid={ `${index}-horizontal-share-btn` }
-                      onClick={ () => handleShare(element.type, element.id) }
-                      src="shareIcon"
-                    >
-                      <img src={ shareIcon } alt={ element.name } />
-                    </button>)
-                }
 
               </div>
             );

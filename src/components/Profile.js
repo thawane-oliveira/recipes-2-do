@@ -2,6 +2,7 @@ import { useHistory } from 'react-router-dom';
 // import { useContext } from 'react';
 // import AppContext from '../context/AppContext';
 import Header from './Header';
+import './styles/Profile.css';
 
 function Profile() {
   const history = useHistory();
@@ -29,36 +30,44 @@ function Profile() {
   };
 
   return (
-    <main>
+    <main className="profile-container">
 
       <Header headerText="Profile" enableSearchButton={ false } />
 
-      <p data-testid="profile-email">{getEmail()}</p>
-
-      <button
-        data-testid="profile-done-btn"
-        onClick={ toDoneRecipes }
-        type="button"
+      <p
+        className="profile-email"
+        data-testid="profile-email"
       >
-        Done Recipes
-      </button>
+        {getEmail()}
+      </p>
+      <div className="profile-btn">
+        <button
+          className="profile-done"
+          data-testid="profile-done-btn"
+          onClick={ toDoneRecipes }
+          type="button"
+        >
+          Done Recipes
+        </button>
 
-      <button
-        data-testid="profile-favorite-btn"
-        onClick={ toFavRecipes }
-        type="button"
-      >
-        Favorite Recipes
-      </button>
+        <button
+          className="profile-fav"
+          data-testid="profile-favorite-btn"
+          onClick={ toFavRecipes }
+          type="button"
+        >
+          Favorite Recipes
+        </button>
 
-      <button
-        data-testid="profile-logout-btn"
-        onClick={ toLogout }
-        type="button"
-      >
-        Logout
-      </button>
-
+        <button
+          className="profile-logout"
+          data-testid="profile-logout-btn"
+          onClick={ toLogout }
+          type="button"
+        >
+          Logout
+        </button>
+      </div>
     </main>
   );
 }
