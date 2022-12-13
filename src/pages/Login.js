@@ -51,7 +51,7 @@ function Login() {
         </button>
 
         <footer className="loginFooter">
-          <b> &copy; Group-2A O melhor do Brasil! </b>
+          <b> &copy; Grupo 2A </b>
         </footer>
 
       </form>

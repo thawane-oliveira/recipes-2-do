@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link, useHistory } from 'react-router-dom';
 import RecipeDetails from './RecipeDetails';
+import './styles/Recipes.css';
 
 function Card({ index, photo, title, id }) {
   const history = useHistory();
@@ -14,17 +15,22 @@ function Card({ index, photo, title, id }) {
 
   return (
     <Link key={ index } to={ verifyId() }>
-      <div data-testid={ `${index}-recipe-card` }>
-        <h3
-          data-testid={ `${index}-card-name` }
-        >
-          {title}
-        </h3>
+      <div
+        className="recipe-card"
+        data-testid={ `${index}-recipe-card` }
+      >
         <img
+          className="card-img"
           src={ photo }
           data-testid={ `${index}-card-img` }
           alt={ title }
         />
+        <h3
+          className="card-title"
+          data-testid={ `${index}-card-name` }
+        >
+          {title}
+        </h3>
       </div>
     </Link>
   );

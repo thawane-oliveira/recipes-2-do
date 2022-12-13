@@ -2,6 +2,7 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppContext from '../context/AppContext';
+import './styles/Header.css';
 
 function SearchBar() {
   const history = useHistory();
@@ -32,10 +33,11 @@ function SearchBar() {
   };
 
   return (
-    <form>
+    <form className="search-form">
 
-      <label htmlFor="search-input">
+      <label htmlFor="search-input" className="search-label">
         <input
+          className="search-input"
           data-testid="search-input"
           id="search-input"
           placeholder="Search recipe"
@@ -44,7 +46,7 @@ function SearchBar() {
         />
       </label>
 
-      <label htmlFor="ingredient">
+      <label htmlFor="ingredient" className="ingredient-label">
         <input
           data-testid="ingredient-search-radio"
           id="ingredient"
@@ -56,7 +58,7 @@ function SearchBar() {
         Ingredient
       </label>
 
-      <label htmlFor="name">
+      <label htmlFor="name" className="name-label">
         <input
           data-testid="name-search-radio"
           id="name"
@@ -68,7 +70,7 @@ function SearchBar() {
         Name
       </label>
 
-      <label htmlFor="firstLetter">
+      <label htmlFor="firstLetter" className="firstletter-label">
         <input
           data-testid="first-letter-search-radio"
           id="firstLetter"
@@ -81,6 +83,7 @@ function SearchBar() {
       </label>
 
       <button
+        className="searchbar-btn"
         data-testid="exec-search-btn"
         onClick={ clickSearchButton }
         type="button"

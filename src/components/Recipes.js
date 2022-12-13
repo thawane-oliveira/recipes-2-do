@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react';
 import AppContext from '../context/AppContext';
 import Card from './Card';
 import Loading from './Loading';
+import './styles/Recipes.css';
 
 function Recipes({ headerText }) {
   const {
@@ -91,29 +92,33 @@ function Recipes({ headerText }) {
   }, [headerText, setCategories, setRecipes]);
 
   return (
-    <div>
-      { loading ? <Loading /> : (
-        categories
-          .filter((_item, index) => index < maxButton)
+    <div className="recipes-container">
+      <div className="filter-btn-container">
+        { loading ? <Loading /> : (
+          categories
+            .filter((_item, index) => index < maxButton)
 
-          .map((recipe) => (
-            <button
-              data-testid={ `${recipe}-category-filter` }
-              key={ recipe }
-              onClick={ buttonFetch }
-              type="button"
-              value={ recipe }
-            >
-              {recipe}
-            </button>
-          )))}
-      <button
-        data-testid="All-category-filter"
-        onClick={ clearFilters }
-        type="button"
-      >
-        All
-      </button>
+            .map((recipe) => (
+              <button
+                className="filter-btn"
+                data-testid={ `${recipe}-category-filter` }
+                key={ recipe }
+                onClick={ buttonFetch }
+                type="button"
+                value={ recipe }
+              >
+                {recipe}
+              </button>
+            )))}
+        <button
+          className="button-all"
+          data-testid="All-category-filter"
+          onClick={ clearFilters }
+          type="button"
+        >
+          All
+        </button>
+      </div>
 
       { loading ? <Loading /> : (
         isCategory === true && initialRecipes

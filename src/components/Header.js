@@ -5,6 +5,7 @@ import Footer from './Footer';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
+import './styles/Header.css';
 
 function Header({ headerText, enableSearchButton }) {
   const history = useHistory();
@@ -25,9 +26,10 @@ function Header({ headerText, enableSearchButton }) {
 
   return (
     <>
-      <header>
-        <h1 data-testid="page-title">{headerText}</h1>
+      <header className="header-container">
+        <h1 className="page-title" data-testid="page-title">{headerText}</h1>
         <button
+          className="profile-button"
           data-testid="profile-button"
           onClick={ redirectToProfile }
           type="button"
@@ -44,6 +46,7 @@ function Header({ headerText, enableSearchButton }) {
         )}
         { enableSearchButton && (
           <button
+            className="search-button"
             type="button"
             onClick={ hideInputOrNot }
             data-testid="search-button"

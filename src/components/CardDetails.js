@@ -1,10 +1,29 @@
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import MerryGoRound from './MerryGoRound';
 import './styles/RecipeDetails.css';
 
 function CardDetails({ title, photo, category, instructions, video, ing, buttons }) {
+  const history = useHistory();
+  const returnPrevious = () => {
+    const local = history.location.pathname;
+    if (local.includes('drinks')) return history.push('/drinks');
+    return history.push('/meals');
+  };
+
   return (
     <div className="card-details">
+      <button
+        type="button"
+        className="return-button"
+        onClick={ returnPrevious }
+      >
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/61/61449.png?w=360"
+          alt="return-button"
+          className="return-img"
+        />
+      </button>
       <h3 className="recipe-title" data-testid="recipe-title">{title}</h3>
       <h4 className="recipe-category" data-testid="recipe-category">
         {category}
@@ -27,7 +46,6 @@ function CardDetails({ title, photo, category, instructions, video, ing, buttons
         src={ video }
       />
       <MerryGoRound />
-      {console.log(typeof buttons)}
     </div>
   );
 }

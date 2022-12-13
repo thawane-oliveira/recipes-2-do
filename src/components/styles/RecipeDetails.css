@@ -69,5 +69,25 @@
     max-width: 80vw;
     width: auto;
   }
+
+  .return-img {
+    height: auto;
+    margin: 4vh;
+    max-height: 8vh;
+    max-width: 8vw;
+    width: auto;
+  }
+
+  .return-button {
+    align-items: center;
+    background-color: white;
+    border-radius: 8%;
+    box-shadow: 2px 2px 6px rgb(29, 29, 29);
+    display: flex;
+    height: 8vh;
+    justify-content: center;
+    margin-right: 85vw;
+    width: 15vw;
+  }
 }
 
