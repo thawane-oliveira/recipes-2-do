@@ -56,14 +56,6 @@
     margin: 1vh;
   }
 
-  .return-img {
-    height: auto;
-    margin: 4vh;
-    max-height: 8vh;
-    max-width: 8vw;
-    width: auto;
-  }
-
   .progress-btn-container {
     align-items: center;
     display: flex;
@@ -92,6 +84,27 @@
 
   .active {
     text-decoration: line-through solid black;
+  }
+
+  .return-img {
+    height: auto;
+    margin: 4vh;
+    max-height: 8vh;
+    max-width: 8vw;
+    width: auto;
+  }
+
+  .return-button {
+    align-items: center;
+    background-color: rgb(255, 244, 226);
+    border-radius: 8%;
+    box-shadow: 2px 2px 6px rgb(29, 29, 29);
+    display: flex;
+    height: 8vh;
+    justify-content: center;
+    margin: 2vh;
+    margin-right: 80vw;
+    width: 15vw;
   }
 }
 
