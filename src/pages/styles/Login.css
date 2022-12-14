@@ -4,7 +4,7 @@
 
 @media ( max-width : 360px ) {
 
-  .teste {
+  .main-login {
     background-image: linear-gradient(lightpink, blanchedalmond);
     height: 640px;
     width: 360px;

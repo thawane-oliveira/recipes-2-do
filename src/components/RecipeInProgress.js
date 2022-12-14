@@ -119,7 +119,10 @@ function RecipeInProgress() {
 
   const retrieveLSProgressRecipes = () => {
     const locStor = returnLSProgressRecipes();
-    const arrProgress = locStor[myLocal][splitedId] || [];
+    let arrProgress = locStor[myLocal][splitedId] || [];
+    if (!Array.isArray(arrProgress)) {
+      arrProgress = Object.keys(arrProgress);
+    }
     const newObj = {};
     arrProgress.forEach((element) => {
       newObj[element] = true;
@@ -128,10 +131,8 @@ function RecipeInProgress() {
   };
 
   const verifyIngredient = (target, it) => {
-    // console.log('bug do Cypress');
     target.parentNode.classList.toggle('active');
     target.classList.toggle('active');
-    target.nextSibling.classList.toggle('active');
 
     const newObj = tickedIngredient;
 
@@ -143,6 +144,7 @@ function RecipeInProgress() {
     const clickedItems = Object.values(newObj);
 
     const x = clickedItems.every((item) => item === true);
+
     if (clickedItems.length === ingredients.length && x === true) {
       setCompleted(true);
     } else {

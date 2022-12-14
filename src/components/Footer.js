@@ -1,5 +1,7 @@
 // import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 import drinkIcon from '../images/drinkIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 import './styles/Footer.css';
@@ -8,13 +10,16 @@ import './styles/Footer.css';
 
 function Footer() {
   const history = useHistory();
+  const { setIsCategory } = useContext(AppContext);
 
   const handleRedirMeals = () => {
     history.push('/meals');
+    setIsCategory(false);
   };
 
   const handleRedirCocktails = () => {
     history.push('/drinks');
+    setIsCategory(false);
   };
 
   return (

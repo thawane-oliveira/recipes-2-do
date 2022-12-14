@@ -89,7 +89,7 @@ function Recipes({ headerText }) {
       }
     };
     fetchRecipes();
-  }, [headerText, setCategories, setRecipes]);
+  }, [headerText, setCategories, setRecipes, setLoading]);
 
   return (
     <div className="recipes-container">

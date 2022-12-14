@@ -13,7 +13,7 @@ function MerryGoRound() {
   const { recommend } = useContext(AppContext);
 
   return (
-    <Carousel style={ { margin: 10 } } className="car-container">
+    <Carousel className="car-container">
 
       { local.includes('meals') ? (
         recommend.map((item, index) => (

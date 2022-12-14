@@ -17,7 +17,7 @@ function Login() {
     history.push('/meals');
   };
   return (
-    <div className="teste">
+    <div className="main-login">
 
       <form className="loginContainer">
         <img src="https://imageup.me/images/recipes-app.png" alt="ícone da tela de login" className="login-img" />
