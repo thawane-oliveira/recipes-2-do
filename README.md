@@ -13,7 +13,9 @@
 ☆ Você pode iniciar uma receita e marcar os ingredientes já utilizados. Com todos marcados, é possível finalizar a receita.
 
 ☆ A aplicação foi projetada pensando em dispositivos móveis (celulares), portanto para melhor visualização e usabilidade, garanta a resolução de 360 x 640 em seu navegador.
-
+  
+☆ Link para visualização de aplicação: https://recipes-2-do.vercel.app/.
+  
 ☆ O grupo foi composto por: Thawane Oliveira, Fernanda Guerra, Diogo Alpino, Nathan Pagotto e José Wemerson.
 </p>
 
